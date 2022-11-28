@@ -50,7 +50,7 @@ int main() {
 
     //std::cout << buffer.passwds.size() << std::endl;
     std::cout << sizeof(buffer.passwds)/sizeof(char)/HASH_LENGTH + 1 << std::endl;
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 5; i++){
         std::cout << buffer.passwds[i] <<std::endl;
     }
 
