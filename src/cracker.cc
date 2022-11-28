@@ -74,6 +74,10 @@ int main() {
     }
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+        thrs[i].join();
+    }
+
+    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         crack(buffer.alphabet, buffer.passwds[i], password2);
         std::cout << password2 << std::endl;
