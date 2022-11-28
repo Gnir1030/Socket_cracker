@@ -56,7 +56,7 @@ int main() {
     //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
 
     std::vector<std::thread> thrs;
-    //std::mutex iMutex;
+    std::mutex iMutex;
     //std::vector<char[4]> pass;
 
 
@@ -65,8 +65,8 @@ int main() {
         thrs.push_back(std::thread([&]{
             char password[4];
             crack(buffer.alphabet, buffer.passwds[i], password);
+            std::lock_guard<std::mutex> guard(iMutex);
             std::cout << password << std::endl;
-            //std::lock_guard<std::mutex> guard(iMutex);
             //pass.push_back(iMutex);
         }));
 
