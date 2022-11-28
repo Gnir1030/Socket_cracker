@@ -50,7 +50,7 @@ int main() {
     std::cout << ntohl(buffer.num_passwds) << std::endl;
     std::cout << buffer.port << std::endl;
 
-    std::atomic<char*> password[4];
+    std::atomic<char*> password;
     //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
 
     //std::cout << buffer.passwds.size() << std::endl;
