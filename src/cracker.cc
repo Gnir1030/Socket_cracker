@@ -38,4 +38,6 @@ int main() {
     int n = recvfrom(sockfd, buffer, sizeof(buffer), 0, NULL, 0);
     if(n < 0) exit(-1);
     std::cout << buffer << std::endl;
+
+    close(sockfd);
 }
