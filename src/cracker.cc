@@ -43,13 +43,15 @@ int main() {
     std::cout << buffer.hostname << std::endl;
     std::cout << buffer.cruzid << std::endl;
     std::cout << buffer.passwds << std::endl;
-    std::cout << buffer.num_passwds << std::endl;
-    std::cout << buffer.port << std::endl;
+    std::cout << ntohs(buffer.num_passwds) << std::endl;
+    std::cout << ntohs(buffer.port) << std::endl;
+
+
 
     //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
 
     //std::cout << buffer.passwds.size() << std::endl;
-    std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
+    //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
     for(int i = 0; i < 5; i++){
         std::cout << buffer.passwds[i] <<std::endl;
     }
