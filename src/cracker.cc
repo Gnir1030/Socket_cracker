@@ -37,7 +37,7 @@ int main() {
     //Message* buffer;
     char buffer[5000];
     //int n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, NULL, 0);
-    int n = recvfrom(sockfd, &buffer, 6000, 0, NULL, 0);
+    int n = recvfrom(sockfd, &buffer, 4999, 0, NULL, 0);
     if(n < 0) exit(-1);
     std::cout << buffer << std::endl;
 
