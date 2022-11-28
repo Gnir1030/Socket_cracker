@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string.h>
 #include "cracker.h"
+#include <unistd.h>
 
 /**
  * @brief main function of yoiur cracker
