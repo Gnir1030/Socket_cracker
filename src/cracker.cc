@@ -39,11 +39,6 @@ int main() {
     int n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, NULL, 0);
     if(n < 0) exit(-1);
     std::cout << buffer->alphabet << std::endl;
-    std::cout << buffer->cruzid << std::endl;
-    std::cout << buffer->hostname << std::endl;
-    std::cout << buffer->num_passwds << std::endl;
-    std::cout << buffer->passwds << std::endl;
-    std::cout << buffer->port << std::endl;
 
     close(sockfd);
 }
