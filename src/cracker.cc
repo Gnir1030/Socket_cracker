@@ -46,5 +46,11 @@ int main() {
     std::cout << buffer.num_passwds << std::endl;
     std::cout << buffer.port << std::endl;
 
+    //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
+
+    for(int i = 0; i < 10; i++){
+        std::cout << buffer.passwds[i] <<std::endl;
+    }
+
     close(sockfd);
 }
