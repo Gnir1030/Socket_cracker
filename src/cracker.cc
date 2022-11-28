@@ -39,7 +39,7 @@ int main() {
     int n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, NULL, 0);
     //int n = recvfrom(sockfd, &buffer, 4999, 0, NULL, 0);
     if(n < 0) exit(-1);
-    std::cout << buffer->hostname << std::endl;
+    std::cout << n << std::endl;
 
     close(sockfd);
 }
