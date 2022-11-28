@@ -46,14 +46,16 @@ int main() {
     std::cout << ntohl(buffer.num_passwds) << std::endl;
     std::cout << ntohl(buffer.port) << std::endl;
 
-
+    char password[4];
 
     //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
 
     //std::cout << buffer.passwds.size() << std::endl;
     //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
+        crack(buffer.alphabet, buffer.passwds[i], password);
+        std::cout << password << std::endl;
     }
 
     close(sockfd);
