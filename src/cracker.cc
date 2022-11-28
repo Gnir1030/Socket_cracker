@@ -60,12 +60,13 @@ int main() {
     //std::vector<char[4]> pass;
 
 
-    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+    for(unsigned int i = 0; i < 1000; i++){
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&]{
             char password[4];
-            crack(buffer.alphabet, buffer.passwds[i], password);
-            std::cout << password << std::endl;
+            int a = i;
+            //crack(buffer.alphabet, buffer.passwds[i], password);
+            std::cout << a << std::endl;
             //pass.push_back(iMutex);
         }));
 
