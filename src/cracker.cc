@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-
+#include <string.h>
 #include "cracker.h"
 
 /**
@@ -17,5 +17,28 @@
  * @return int not checked by test harness
  */
 int main() {
-    std::cout << "Not implemented!" << std::endl;
+    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if(sockfd < 0 ) exit(-1);
+
+    struct sockaddr_in server_addr;
+    bzero((char*) &server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(get_multicast_port());
+
+    if(bind(sockfd, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0) exit("bind");
+
+    struct ip_mreq multicastRequest;
+    multicastRequest.imr_multiaddr.s_addr = get_multicast_address();
+    multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
+    if(setsockopt(sockfd, IPROTO_IP, IP_ADD_MEMBERSHIP, (void*) &multicastRequest, 
+    sizeof(multicastRequest)) < 0) exit(-1);
+
+    char buffer[256];
+    for(;;){
+        bzero(buffer,256);
+        int n = recvfrom(sockfd, buffer, 255, 0, NULL, 0);
+        if(n < 0) exit(-1);
+
+        std::cout << buffer << endl;
+    }
 }
