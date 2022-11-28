@@ -43,8 +43,8 @@ int main() {
     std::cout << buffer.hostname << std::endl;
     std::cout << buffer.cruzid << std::endl;
     std::cout << buffer.passwds << std::endl;
-    std::cout << ntohs(buffer.num_passwds) << std::endl;
-    std::cout << ntohs(buffer.port) << std::endl;
+    std::cout << ntohl(buffer.num_passwds) << std::endl;
+    std::cout << ntohl(buffer.port) << std::endl;
 
 
 
