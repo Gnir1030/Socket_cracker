@@ -10,7 +10,6 @@
 #include <thread>
 #include <vector>
 #include <mutex>
-#include <atomic>
 #include "cracker.h"
 #include <unistd.h>
 
@@ -50,21 +49,22 @@ int main() {
     std::cout << ntohl(buffer.num_passwds) << std::endl;
     std::cout << buffer.port << std::endl;
 
-    std::atomic<char[4]> password;
+    char password[4];
     //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
 
     //std::cout << buffer.passwds.size() << std::endl;
     //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
 
     std::vector<std::thread> thrs;
-    //std::mutex iMutex;
+    std::mutex iMutex;
     //std::vector<char[4]> pass;
 
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&]{
-            crack(buffer.alphabet, buffer.passwds[i], password);
+            //char password[4];
+            crack(buffer.alphabet, buffer.passwds[i], &password);
             std::cout << password << std::endl;
             //pass.push_back(iMutex);
         }));
@@ -72,16 +72,18 @@ int main() {
         //std::cout << password << std::endl;
     }
 
-    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-        thrs[i].join();
+    for(auto& t: thrs){
+        t.join();
     }
 
+    /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        crack(buffer.alphabet, buffer.passwds[i], password);
-        std::cout << password << std::endl;
+        crack(buffer.alphabet, buffer.passwds[i], password2);
+        std::cout << password2 << std::endl;
   
     }
+    */
 
     close(sockfd);
 }
