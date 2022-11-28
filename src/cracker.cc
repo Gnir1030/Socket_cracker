@@ -57,14 +57,15 @@ int main() {
 
     std::vector<std::thread> thrs;
     std::mutex iMutex;
+    char password[buffer.num_passwds][5];
     char password2[4];
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        thrs.push_back(std::thread([&buffer, i]{
-            char password[4];
-            crack(buffer.alphabet, buffer.passwds[i], password);
-            std::cout << password <<std::endl;
+        thrs.push_back(std::thread([&password,&buffer, i]{
+            //char password[4];
+            crack(buffer.alphabet, buffer.passwds[i], password[i]);
+            std::cout << password[i] <<std::endl;
             //std::cout << i <<std::endl;
         }));
 
