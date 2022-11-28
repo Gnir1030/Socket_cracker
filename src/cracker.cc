@@ -49,15 +49,15 @@ int main() {
     std::cout << ntohl(buffer.num_passwds) << std::endl;
     std::cout << buffer.port << std::endl;
 
-    char password[4];
+    char password2[4];
     //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
 
     //std::cout << buffer.passwds.size() << std::endl;
     //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
 
     std::vector<std::thread> thrs;
-    std::mutex iMutex;
-    std::vector<char[4]> pass;
+    //std::mutex iMutex;
+    //std::vector<char[4]> pass;
 
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
@@ -75,7 +75,7 @@ int main() {
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        crack(buffer.alphabet, buffer.passwds[i], password);
+        crack(buffer.alphabet, buffer.passwds[i], password2);
         std::cout << password << std::endl;
   
     }
