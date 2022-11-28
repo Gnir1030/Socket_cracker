@@ -21,73 +21,89 @@
  * @return int not checked by test harness
  */
 int main() {
-    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
-    struct sockaddr_in server_addr;
+    struct sockaddr_in server_addr; // server address
     bzero((char*) &server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(get_multicast_port());
+    server_addr.sin_port = htons(get_multicast_port()); //recieving port
 
     if(bind(sockfd, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0) exit(-1);
 
     struct ip_mreq multicastRequest;
-    multicastRequest.imr_multiaddr.s_addr = get_multicast_address();
-    multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
-    if(setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void*) &multicastRequest, 
+    multicastRequest.imr_multiaddr.s_addr = get_multicast_address(); //receiving multicast address
+    multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY); //from any port
+    if(setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void*) &multicastRequest, //response to multicast request
     sizeof(multicastRequest)) < 0) exit(-1);
 
-    Message buffer;
+    Message buffer; //recipent buffer
+    Message newBuffer; //sender buffer
     //char buffer[5000];
-    int n = recvfrom(sockfd, (void*)&buffer, sizeof(buffer), 0, NULL, 0);
+
+    int n = recvfrom(sockfd, (void*)&buffer, sizeof(buffer), 0, NULL, 0); //receive data
     //int n = recvfrom(sockfd, &buffer, 4999, 0, NULL, 0);
     if(n < 0) exit(-1);
+
     std::cout << buffer.alphabet << std::endl;
+    strcpy(newBuffer.alphabet,buffer.alphabet);
     std::cout << buffer.hostname << std::endl;
+    strcpy(newBuffer.hostname,buffer.hostname);
     std::cout << buffer.cruzid << std::endl;
+    strcpy(newBuffer.cruzid,buffer.cruzid);
     std::cout << buffer.passwds << std::endl;
     std::cout << ntohl(buffer.num_passwds) << std::endl;
-    std::cout << buffer.port << std::endl;
+    strcpy(newBuffer.num_passwds,buffer.num_passwds);
+    std::cout << ntohl(buffer.port) << std::endl;
+    strcpy(newBuffer.port, buffer.port);
 
-    //char password[4];
-    //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
-
-    //std::cout << buffer.passwds.size() << std::endl;
-    //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
-
-    std::vector<std::thread> thrs;
-    std::mutex iMutex;
-    char password2[4];
-    char passArr[ntohl(buffer.num_passwds)][5];
+    std::vector<std::thread> thrs; // multithread vector
+    //char password2[4];
+    char passArr[MAX_HASHES][HASH_LENGTH + 1]; // save passwords
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        thrs.push_back(std::thread([&iMutex,&passArr,&buffer, i]{
-            //char password[4];
+        thrs.push_back(std::thread([&passArr,&buffer, i]{
             crack(buffer.alphabet, buffer.passwds[i], passArr[i]);
             std::cout << passArr[i] <<std::endl;
-            //std::cout << i <<std::endl;
-            //std::lock_guard<std::mutex> guard(iMutex);
-            //strcpy(passArr[i],password);
         }));
-
-        //std::cout << password << std::endl;
     }
 
     for(auto& t: thrs){
-        t.join();
+        t.join(); // join threads vector
     }
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << passArr[i] <<std::endl;
     }
 
+    newBuffer.passwds = &passArr;
+/*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         crack(buffer.alphabet, buffer.passwds[i], password2);
         std::cout << password2 << std::endl;
   
     }
-
+*/
     close(sockfd);
+
+    int sendsock = socket(AF_INET, SOCK_STREAM, 0);
+    if(sendsock < 0) exit(-1);
+
+    struct hostent *server = gethostbyname(buffer.hostname);
+    if(server == NULL) exit(-1);
+
+    struct sockaddr_in serv_addr;
+    bzero((char*) &serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
+    serv_addr.sin_port = buffer.port;
+
+    if(connect(sendsock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
+
+    int s = send(sendsock, (void*) &newBuffer, sizeof(newBuffer), 0);
+    if(s < 0) exit(-1);
+
+    close(sendsock);
 }
