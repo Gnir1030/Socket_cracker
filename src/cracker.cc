@@ -64,7 +64,7 @@ int main() {
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&]{
             //char password[4];
-            crack(buffer.alphabet, buffer.passwds[i], &password);
+            crack(buffer.alphabet, buffer.passwds[i], password);
             std::cout << password << std::endl;
             //pass.push_back(iMutex);
         }));
