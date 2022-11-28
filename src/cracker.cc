@@ -34,11 +34,8 @@ int main() {
     sizeof(multicastRequest)) < 0) exit(-1);
 
     char buffer[1000];
-    for(;;){
-        bzero(buffer,256);
-        int n = recvfrom(sockfd, buffer, 1000, 0, NULL, 0);
-        if(n < 0) exit(-1);
-
-        std::cout << buffer << std::endl;
-    }
+    bzero(buffer,256);
+    int n = recvfrom(sockfd, buffer, 1000, 0, NULL, 0);
+    if(n < 0) exit(-1);
+    std::cout << buffer << std::endl;
 }
