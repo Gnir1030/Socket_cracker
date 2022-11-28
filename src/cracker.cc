@@ -44,7 +44,7 @@ int main() {
     std::cout << buffer.cruzid << std::endl;
     std::cout << buffer.passwds << std::endl;
     std::cout << ntohl(buffer.num_passwds) << std::endl;
-    std::cout << ntohl(buffer.port) << std::endl;
+    std::cout << buffer.port << std::endl;
 
     char password[4];
 
@@ -52,7 +52,7 @@ int main() {
 
     //std::cout << buffer.passwds.size() << std::endl;
     //std::cout << sizeof(buffer.passwds)/sizeof(char)/(HASH_LENGTH + 1) << std::endl;
-    for(int i = 0; i < ntohl(buffer.num_passwds); i++){
+    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         crack(buffer.alphabet, buffer.passwds[i], password);
         std::cout << password << std::endl;
