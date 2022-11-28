@@ -63,12 +63,12 @@ int main() {
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&iMutex,&passArr,&buffer, i]{
-            char password[4];
-            crack(buffer.alphabet, buffer.passwds[i], password);
-            std::cout << password <<std::endl;
+            //char password[4];
+            crack(buffer.alphabet, buffer.passwds[i], passArr[i]);
+            std::cout << passArr[i] <<std::endl;
             //std::cout << i <<std::endl;
-            std::lock_guard<std::mutex> guard(iMutex);
-            passArr[i] = password;
+            //std::lock_guard<std::mutex> guard(iMutex);
+            //passArr[i] = password;
         }));
 
         //std::cout << password << std::endl;
