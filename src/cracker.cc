@@ -62,7 +62,7 @@ int main() {
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        thrs.push_back(std::thread([&passArr,&buffer, i]{
+        thrs.push_back(std::thread([iMutex,&passArr,&buffer, i]{
             char password[4];
             crack(buffer.alphabet, buffer.passwds[i], password);
             std::cout << password <<std::endl;
