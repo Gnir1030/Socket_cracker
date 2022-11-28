@@ -57,7 +57,7 @@ int main() {
 
     std::vector<std::thread> thrs;
     std::mutex iMutex;
-    std::vector<char*> pass;
+    std::vector<char[4]> pass;
 
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
