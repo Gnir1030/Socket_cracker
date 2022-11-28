@@ -57,16 +57,18 @@ int main() {
 
     std::vector<std::thread> thrs;
     std::mutex iMutex;
-    char password[buffer.num_passwds][5];
     char password2[4];
+    char passArr[ntohl(buffer.num_passwds)][4];
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        thrs.push_back(std::thread([&password,&buffer, i]{
-            //char password[4];
-            crack(buffer.alphabet, buffer.passwds[i], password[i]);
-            std::cout << password[i] <<std::endl;
+        thrs.push_back(std::thread([&passArr,&buffer, i]{
+            char password[4];
+            crack(buffer.alphabet, buffer.passwds[i], password);
+            std::cout << password <<std::endl;
             //std::cout << i <<std::endl;
+            std::lock_guard<std::mutex> guard(iMutex);
+            passArr[i] = password;
         }));
 
         //std::cout << password << std::endl;
@@ -76,6 +78,9 @@ int main() {
         t.join();
     }
 
+    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+        std::cout << passArr[i] <<std::endl;
+    }
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
