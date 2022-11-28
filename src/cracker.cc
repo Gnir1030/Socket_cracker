@@ -48,6 +48,8 @@ int main() {
 
     //char a[MAX_HASHES][HASH_LENGTH+1] = buffer.passwds;
 
+    std::cout << buffer.passwds.size() << std::endl;
+    std::cout << sizeof(buffer.passwds) << std::endl;
     for(int i = 0; i < 10; i++){
         std::cout << buffer.passwds[i] <<std::endl;
     }
