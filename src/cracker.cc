@@ -35,7 +35,10 @@ int main() {
     sizeof(multicastRequest)) < 0) exit(-1);
 
     Message* buffer;
-    //bzero(buffer,256);
+    bzero(buffer->alphabet,256);
+    bzero(buffer->cruzid,256);
+    bzero(buffer->hostname,256);
+    bzero(buffer->passwds,256);
     int n = recvfrom(sockfd, buffer, sizeof(buffer), 0, NULL, 0);
     if(n < 0) exit(-1);
     std::cout << buffer << std::endl;
