@@ -34,11 +34,12 @@ int main() {
     if(setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void*) &multicastRequest, 
     sizeof(multicastRequest)) < 0) exit(-1);
 
-    Message* buffer;
-    //char buffer[256];
+    //Message* buffer;
+    char buffer[5000];
+    //int n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, NULL, 0);
     int n = recvfrom(sockfd, &buffer, sizeof(buffer), 0, NULL, 0);
     if(n < 0) exit(-1);
-    std::cout << buffer->alphabet << std::endl;
+    std::cout << buffer << std::endl;
 
     close(sockfd);
 }
