@@ -92,8 +92,18 @@ int main() {
     char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2";
     char pass[5] = "!!!!";
 //zUS0
-    pcrack(alphabet, passwds, pass, 24, 16);
+
+    unsigned int ssize = 24;
+    for(unsigned int i = 0; i < ssize; i++){
+        thrs.push_back(std::thread(pcrack, alphabet, passwds, &pass, ssize, i));
+    }
+
+    for(auto& t: thrs){
+        t.join(); // join threads vector
+    }
+
     std::cout << pass <<std::endl;
+
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
