@@ -110,7 +110,7 @@ int main() {
     memcpy( salt, &passwds[0], 2 );
     std::mutex iMutex;
     unsigned int ssize = 2;
-    char buffer[ssize][5];
+    char buffer[2][5];
     for(unsigned int i = 0; i < ssize; i++){
         thrs.push_back(std::thread([&iMutex, &alphabet, &salt, &buffer, &pass, ssize, i]{
             pcrack(alphabet, salt, buffer, pass, ssize, i, iMutex);
