@@ -29,13 +29,13 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
     char a[5];
     char salt[2];
     memcpy( salt, &hash[0], 2 );
-    for(unsigned int i = 0; i < sizeof(alphabet)/sizeof(char); i++){
+    for(unsigned int i = 0; i < ALPHABET_LEN; i++){
         a[0] = alphabet[i];
-        for(unsigned int j = 0; j < sizeof(alphabet)/sizeof(char); j++){
+        for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
             a[1] = alphabet[j];
-            for(unsigned int k = 0; k < sizeof(alphabet)/sizeof(char); k++){
+            for(unsigned int k = 0; k <  ALPHABET_LEN; k++){
                 a[2] = alphabet[k];
-                for(unsigned int p = 0; p < sizeof(alphabet)/sizeof(char); p++){
+                for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
                     if(crypt(a, salt) == hash){
                         memcpy( passwd, &a[0], 5);
@@ -50,6 +50,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
 
 
 int main() {
+    /*
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
@@ -83,12 +84,15 @@ int main() {
     newBuffer.num_passwds = buffer.num_passwds;
     std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
-
+*/
     std::vector<std::thread> thrs; // multithread vector
 
-    std::cout << buffer.passwds[0] <<std::endl;
-    pcrack(buffer.alphabet, buffer.passwds[0], newBuffer.passwds[0]);
-    std::cout << newBuffer.passwds[0] <<std::endl;
+    char alphabet[ALPHABET_LEN + 1] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2";
+    char pass[4];
+
+    pcrack(alphabet, passwds, pass);
+    std::cout << pass <<std::endl;
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
