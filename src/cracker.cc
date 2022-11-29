@@ -10,10 +10,12 @@
 #include <thread>
 #include <vector>
 #include <mutex>
-#include <sys/socket.h>
-#include <netdb.h>
+#include <algorithm>
+#include <iomanip>
 #include "cracker.h"
 #include <unistd.h>
+#include <sys/socket.h>
+#include <netdb.h>
 
 /**
  * @brief main function of yoiur cracker
@@ -53,7 +55,6 @@ int main() {
     strcpy(newBuffer.hostname,buffer.hostname);
     std::cout << buffer.cruzid << std::endl;
     strcpy(newBuffer.cruzid,buffer.cruzid);
-    std::cout << buffer.passwds << std::endl;
     std::cout << ntohl(buffer.num_passwds) << std::endl;
     newBuffer.num_passwds = buffer.num_passwds;
     std::cout << ntohl(buffer.port) << std::endl;
@@ -75,13 +76,12 @@ int main() {
         t.join(); // join threads vector
     }
 
-    for(int i = 0; i < MAX_HASHES; i++){
-        strcpy(newBuffer.passwds[i], passArr[i]);
-    }
+    std::copy(&passArr[0][0], &passArr[0][0] + MAX_HASHES * (HASH_LENGTH + 1), &newBuffer.passwds[0][0]);
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
+
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
