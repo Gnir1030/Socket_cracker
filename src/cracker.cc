@@ -28,6 +28,7 @@
 void pcrack(const char *alphabet, const char *hash, char *passwd){
     char a[5];
     char salt[2];
+    char* o = "zUS0";
     memcpy( salt, &hash[0], 2 );
     for(unsigned int i = 0; i < ALPHABET_LEN; i++){
         a[0] = alphabet[i];
@@ -42,7 +43,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
                         memcpy( passwd, &a[0], 5);
                         return;
                     }
-                    if(a == 'zUS0'){
+                    if(a == o){
                         std::cout << "fail" <<std::endl;
                         memcpy( passwd, &a[0], 5);
                         return;
