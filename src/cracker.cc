@@ -29,6 +29,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
     char a[5]; //4 char password
     char salt[3];
     memcpy( salt, &hash[0], 2 ); // first two character as salt
+    salt[2] = '\0';
 
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
         a[0] = alphabet[i];
