@@ -120,6 +120,8 @@ int main() {
             std::cout << newBuffer.passwds[i] <<std::endl;
         }));
         */
+       std::cout << buffer.passwds[i] <<std::endl;
+
         for(unsigned int i = 0; i < ssize ; i++){
             thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
                 pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
@@ -153,7 +155,7 @@ int main() {
     }
 */
 
-/*
+
     close(sockfd);
 
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
@@ -174,5 +176,5 @@ int main() {
     if(s < 0) exit(-1);
 
     close(sendsock);
-    */
+
 }
