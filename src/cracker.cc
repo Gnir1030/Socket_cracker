@@ -29,7 +29,8 @@ void pcrack(const char *alphabet, const char *hash, char* buffer, char *passwd, 
     //char a[5]; //4 char password
     //char salt[3];
     //memcpy( salt, &hash[0], 2 ); // first two character as salt
-    std::cout << hash <<std::endl;
+    //std::cout << hash <<std::endl;
+    buffer[4] = '\0';
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
         buffer[0] = alphabet[i];
         for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
