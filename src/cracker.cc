@@ -38,10 +38,12 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
+                    /*
                     if(strcmp(crypt(a, salt), hash) == 0){
                         memcpy( passwd, &a[0], 5);
                         return;
                     }
+                    */
                 }
             }
         }
