@@ -83,8 +83,8 @@ int main() {
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
 
-    char hash[HASH_LENGTH + 1];
-    crack(buffer.alphabet, hash, newBuffer.passwds[0]);
+    char* salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/.";
+    char* hash = crypt(newBuffer.passwds[0], salt);
     std::cout << "HASH: " << hash << std::endl;
 
 /*
