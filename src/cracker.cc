@@ -27,7 +27,7 @@
  */
 void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads, std::mutex& iMutex){
     char a[5]; //4 char password
-    char salt[2];
+    char salt[3];
     memcpy( salt, &hash[0], 2 ); // first two character as salt
 
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
