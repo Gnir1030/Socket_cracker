@@ -12,7 +12,7 @@
 #include <mutex>
 #include <algorithm>
 #include <iomanip>
-#include <string>
+#include <string.h>
 #include "cracker.h"
 #include <unistd.h>
 #include <sys/socket.h>
@@ -112,6 +112,7 @@ int main() {
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
+    
 
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
