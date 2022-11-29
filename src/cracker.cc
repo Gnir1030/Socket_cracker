@@ -30,6 +30,8 @@ void pcrack(const char *alphabet, const char *hash, const char *salt, char* buff
     //char salt[3];
     //memcpy( salt, &hash[0], 2 ); // first two character as salt
     //std::cout << hash <<std::endl;
+    struct crypt_data data[1] = {0};
+    
     buffer[4] = '\0';
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
         buffer[0] = alphabet[i];
@@ -39,11 +41,11 @@ void pcrack(const char *alphabet, const char *hash, const char *salt, char* buff
                 buffer[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     buffer[3] = alphabet[p];
-                    char hc[14];
-                    strcpy(hc, crypt(buffer, salt));
+                    char* hc = crypt_r(buffer, salt, data);
+                    //strcpy(hc, crypt(buffer, salt));
                     int cmp = strcmp(hc, hash);
                     if(buffer[0] == 'z' && buffer[1] == 'U' && buffer[2] == 'S' && buffer[3] == '0'){
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << buffer << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << crypt(buffer, salt) << "," << hc
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << buffer << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << crypt_r(buffer, salt, data) << "," << hc
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
