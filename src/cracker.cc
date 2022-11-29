@@ -90,7 +90,7 @@ int main() {
 
     char alphabet[ALPHABET_LEN + 1] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2";
-    char pass[5];
+    char pass[5] = "!!!!";
 //zUS0
     pcrack(alphabet, passwds, pass, 24, 0);
     std::cout << pass <<std::endl;
