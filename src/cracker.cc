@@ -108,6 +108,8 @@ int main() {
 //zUS0
     char salt[3];
     memcpy( salt, &passwds[0], 2 );
+    std::cout << salt <<std::endl;
+    
     std::mutex iMutex;
     unsigned int ssize = 2;
     char buffer[ssize][5];
