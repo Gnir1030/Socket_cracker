@@ -53,9 +53,9 @@ int main() {
     strcpy(newBuffer.cruzid,buffer.cruzid);
     std::cout << buffer.passwds << std::endl;
     std::cout << ntohl(buffer.num_passwds) << std::endl;
-    strcpy(newBuffer.num_passwds,buffer.num_passwds);
+    newBuffer.num_passwds = buffer.num_passwds;
     std::cout << ntohl(buffer.port) << std::endl;
-    strcpy(newBuffer.port, buffer.port);
+    newBuffer.port = buffer.port;
 
     std::vector<std::thread> thrs; // multithread vector
     //char password2[4];
@@ -77,7 +77,7 @@ int main() {
         std::cout << passArr[i] <<std::endl;
     }
 
-    newBuffer.passwds = &passArr;
+    newBuffer.passwds = passArr;
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
@@ -91,7 +91,7 @@ int main() {
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
 
-    struct hostent *server = gethostbyname(buffer.hostname);
+    struct hostent *server = gethostname(buffer.hostname);
     if(server == NULL) exit(-1);
 
     struct sockaddr_in serv_addr;
