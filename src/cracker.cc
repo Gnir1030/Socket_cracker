@@ -38,7 +38,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
-                    if(crypt(a, salt) == hash){
+                    if(strcmp(crypt(a, salt), hash) == 0){
                         std::cout << "suc" << std::endl;
                         memcpy( passwd, &a[0], 5);
                         return;
