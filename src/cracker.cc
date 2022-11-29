@@ -26,7 +26,7 @@
  * 
  * @return int not checked by test harness
  */
-void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads, std::mutex& iMutex){
+void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
     char a[5]; //4 char password
     char salt[3];
     memcpy( salt, &hash[0], 2 ); // first two character as salt
@@ -43,7 +43,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
-                        //memcpy( passwd, &a[0], 5);
+                        memcpy( passwd, &a[0], 5);
                         std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\ncrypt(a,salt):" << crypt_r(a, salt, &data)
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
@@ -51,10 +51,6 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 }
             }
         }
-        //std::cout << a << std::endl;
-        //std::cout << alphabet << std::endl;
-        //std::cout << hash << std::endl;
-        //std::cout << passwd << std::endl;
     }
 }
 
@@ -102,13 +98,12 @@ int main() {
     char pass[5] = "!!!!";
 //zUS0
 
-    std::mutex iMutex;
+    //std::mutex iMutex;
     unsigned int ssize = 24;
     //char buffer[ssize][5];
     for(unsigned int i = 0; i < ssize; i++){
-        thrs.push_back(std::thread([&iMutex, &alphabet, &passwds, &pass, ssize, i]{
-            pcrack(alphabet, passwds, pass, ssize, i, iMutex);
-            //std::cout << pass <<std::endl;
+        thrs.push_back(std::thread([&alphabet, &passwds, &pass, ssize, i]{
+            pcrack(alphabet, passwds, pass, ssize, i);
         }));
     }
 
