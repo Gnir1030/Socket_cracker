@@ -83,6 +83,10 @@ int main() {
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
 
+    char hash[HASH_LENGTH + 1];
+    crack(buffer.alphabet, hash, newBuffer.passwds[0]);
+    std::cout << "HASH: " << hash << endl;
+    
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
