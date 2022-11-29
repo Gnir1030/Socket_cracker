@@ -49,7 +49,7 @@ int main() {
     //int n = recvfrom(sockfd, &buffer, 4999, 0, NULL, 0);
     if(n < 0) exit(-1);
 
-/*
+
     std::cout << buffer.alphabet << std::endl;
     strcpy(newBuffer.alphabet,buffer.alphabet);
     std::cout << buffer.hostname << std::endl;
@@ -60,7 +60,7 @@ int main() {
     newBuffer.num_passwds = buffer.num_passwds;
     std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
-*/
+
     std::vector<std::thread> thrs; // multithread vector
     //char password2[4];
     //char passArr[MAX_HASHES][HASH_LENGTH + 1]; // save passwords
