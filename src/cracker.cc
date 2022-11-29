@@ -43,7 +43,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     strcpy(hc, crypt(a, salt));
                     int cmp = strcmp(hc, hash);
                     if(a[0] == 'z' && a[1] == 'U' && a[2] == 'S' && a[3] == '0'){
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc 
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << crypt(a, salt)
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
