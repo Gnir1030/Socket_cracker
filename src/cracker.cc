@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <crypt.h>
 
 /**
  * @brief main function of yoiur cracker
