@@ -61,6 +61,10 @@ int main() {
 
     std::vector<std::thread> thrs; // multithread vector
 
+    std::cout << buffer.passwds[0] <<std::endl;
+    crack(buffer.alphabet, buffer.passwds[0], newBuffer.passwds[0]);
+    std::cout << newBuffer.passwds[0] <<std::endl;
+/*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&newBuffer,&buffer, i]{
@@ -72,15 +76,15 @@ int main() {
     for(auto& t: thrs){
         t.join(); // join threads vector
     }
-
     //std::copy(&passArr[0][0], &passArr[0][0] + MAX_HASHES * (HASH_LENGTH + 1), &newBuffer.passwds[0][0]);
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
+*/
 
     //char salt = '\0';
-    char* hash = crypt(newBuffer.passwds[0], "a/");
+    char* hash = crypt(newBuffer.passwds[0], "");
     std::cout << "HASH: " << hash << std::endl;
 
 /*
