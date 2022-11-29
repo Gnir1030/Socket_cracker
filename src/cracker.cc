@@ -121,7 +121,7 @@ int main() {
         }));
         */
         for(unsigned int i = 0; i < ssize ; i++){
-            thrs.push_back(std::thread([&buffer.alphabet, &buffer.passwds, &newBuffer.passwds, ssize, i, k]{
+            thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
                 pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
             }));
         }
