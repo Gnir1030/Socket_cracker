@@ -7,7 +7,6 @@
 //#define _GNU_SOURCE
 #include <crypt.h>
 #include <iostream>
-#include <string.h>
 #include <thread>
 #include <vector>
 #include <mutex>
@@ -79,6 +78,7 @@ int main() {
     int n = recvfrom(sockfd, (void*)&buffer, sizeof(buffer), 0, NULL, 0); //receive data
     if(n < 0) exit(-1);
 
+    close(sockfd);
 
     std::cout << buffer.alphabet << std::endl;
     strcpy(newBuffer.alphabet,buffer.alphabet);
@@ -91,37 +91,11 @@ int main() {
     std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
 
-    //std::vector<std::thread> thrs; // multithread vector
-
-    //char alphabet[ALPHABET_LEN + 1] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //char range
-    //char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2"; //hashcode
-    //char pass[5] = "!!!!";
-//zUS0
-
-/*
-    unsigned int ssize = 24;
-    for(unsigned int i = 0; i < ssize; i++){
-        thrs.push_back(std::thread([&alphabet, &passwds, &pass, ssize, i]{
-            pcrack(alphabet, passwds, pass, ssize, i);
-        }));
-    }
-
-    for(auto& t: thrs){
-        t.join(); // join threads vector
-    }
-*/
 
     unsigned int ssize = 24;
     for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k++){
         std::vector<std::thread> thrs;
-        /*
-        std::cout << buffer.passwds[i] <<std::endl;
-        thrs.push_back(std::thread([&newBuffer,&buffer, i]{
-            crack(buffer.alphabet, buffer.passwds[i], newBuffer.passwds[i]);
-            std::cout << newBuffer.passwds[i] <<std::endl;
-        }));
-        */
-       std::cout << buffer.passwds[k] <<std::endl;
+        std::cout << buffer.passwds[k] <<std::endl;
 
         for(unsigned int i = 0; i < ssize ; i++){
             thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
@@ -135,29 +109,9 @@ int main() {
     }
 
 
-    //std::copy(&passArr[0][0], &passArr[0][0] + MAX_HASHES * (HASH_LENGTH + 1), &newBuffer.passwds[0][0]);
-
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
-
-
-    //char salt[2];
-    //memcpy( salt, &passwds[0], 2 );
-    //char* hash = crypt(pass, salt);
-    //std::cout << "HASH: " << hash << std::endl;//a5FptUGIeJaBA
-
-/*
-    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-        std::cout << buffer.passwds[i] <<std::endl;
-        crack(buffer.alphabet, buffer.passwds[i], password2);
-        std::cout << password2 << std::endl;
-  
-    }
-*/
-
-
-    close(sockfd);
 
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
