@@ -25,6 +25,30 @@
  * 
  * @return int not checked by test harness
  */
+void pcrack(const char *alphabet, const char *hash, char *passwd){
+    char a[5];
+    char salt[2];
+    memcpy( salt, &hash[0], 2 );
+    for(int i = 0; i < sizeof(alphabet)/sizeof(char); i++){
+        a[0] = alphabet[i];
+        for(int j = 0; j < sizeof(alphabet)/sizeof(char); j++){
+            a[1] = alphabet[j];
+            for(int k = 0; k < sizeof(alphabet)/sizeof(char); k++){
+                a[2] = alphabet[k];
+                for(int p = 0; p < sizeof(alphabet)/sizeof(char); p++){
+                    a[3] = alphabet[p];
+                    if(crypt(a, salt) == hash){
+                        memcpy( passwd, a[0], 5);
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
 int main() {
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
@@ -63,7 +87,7 @@ int main() {
     std::vector<std::thread> thrs; // multithread vector
 
     std::cout << buffer.passwds[0] <<std::endl;
-    crack(buffer.alphabet, buffer.passwds[0], newBuffer.passwds[0]);
+    pcrack(buffer.alphabet, buffer.passwds[0], newBuffer.passwds[0]);
     std::cout << newBuffer.passwds[0] <<std::endl;
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
