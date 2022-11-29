@@ -67,7 +67,7 @@ int main() {
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
-        thrs.push_back(std::thread([&passArr,&buffer, i]{
+        thrs.push_back(std::thread([&newBuffer,&buffer, i]{
             crack(buffer.alphabet, buffer.passwds[i], newBuffer.passwds[i]);
             std::cout << newBuffer.passwds[i] <<std::endl;
         }));
