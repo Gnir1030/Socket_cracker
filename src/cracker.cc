@@ -42,7 +42,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
                         memcpy( passwd, &a[0], 5);
                         return;
                     }
-                    if(a == "zUS0"){
+                    if(a == 'zUS0'){
                         std::cout << "fail" <<std::endl;
                         memcpy( passwd, &a[0], 5);
                         return;
