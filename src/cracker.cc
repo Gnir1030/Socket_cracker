@@ -38,14 +38,13 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
                 for(unsigned int p = 0; p < sizeof(alphabet)/sizeof(char); p++){
                     a[3] = alphabet[p];
                     if(crypt(a, salt) == hash){
-                        std::cout << a << std::endl;
                         memcpy( passwd, &a[0], 5);
                         return;
                     }
                 }
             }
         }
-
+        std::cout << a << std::endl;
     }
 }
 
