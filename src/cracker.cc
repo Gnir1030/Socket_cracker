@@ -84,7 +84,7 @@ int main() {
     }
 */
 
-    char* salt;
+    char salt[2];
     memcpy( salt, &newBuffer.passwds[0][0], 2 );
     char* hash = crypt(newBuffer.passwds[0], salt);
     std::cout << "HASH: " << hash << std::endl;
