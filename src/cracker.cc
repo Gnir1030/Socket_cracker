@@ -120,7 +120,7 @@ int main() {
             std::cout << newBuffer.passwds[i] <<std::endl;
         }));
         */
-       std::cout << buffer.passwds[i] <<std::endl;
+       std::cout << buffer.passwds[k] <<std::endl;
 
         for(unsigned int i = 0; i < ssize ; i++){
             thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
