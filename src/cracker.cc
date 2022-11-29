@@ -56,7 +56,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
 
 
 int main() {
-    /*
+
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
@@ -90,17 +90,16 @@ int main() {
     newBuffer.num_passwds = buffer.num_passwds;
     std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
-*/
+
     std::vector<std::thread> thrs; // multithread vector
 
-    char alphabet[ALPHABET_LEN + 1] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //char range
-    char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2"; //hashcode
-    char pass[5] = "!!!!";
+    //char alphabet[ALPHABET_LEN + 1] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //char range
+    //char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2"; //hashcode
+    //char pass[5] = "!!!!";
 //zUS0
 
-    //std::mutex iMutex;
+/*
     unsigned int ssize = 24;
-    //char buffer[ssize][5];
     for(unsigned int i = 0; i < ssize; i++){
         thrs.push_back(std::thread([&alphabet, &passwds, &pass, ssize, i]{
             pcrack(alphabet, passwds, pass, ssize, i);
@@ -110,32 +109,40 @@ int main() {
     for(auto& t: thrs){
         t.join(); // join threads vector
     }
+*/
 
-    std::cout << pass <<std::endl;
 
-/*
-    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+    for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k++){
+        /*
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&newBuffer,&buffer, i]{
             crack(buffer.alphabet, buffer.passwds[i], newBuffer.passwds[i]);
             std::cout << newBuffer.passwds[i] <<std::endl;
         }));
+        */
+        for(unsigned int i = 0; i < ssize; i++){
+            thrs.push_back(std::thread([&buffer.alphabet, &buffer.passwds, &newBuffer.passwds, ssize, i, k]{
+                pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
+            }));
+        }
+
+        for(auto& t: thrs){
+            t.join(); // join threads vector
+        }
     }
 
-    for(auto& t: thrs){
-        t.join(); // join threads vector
-    }
+
     //std::copy(&passArr[0][0], &passArr[0][0] + MAX_HASHES * (HASH_LENGTH + 1), &newBuffer.passwds[0][0]);
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
-*/
 
-    char salt[2];
-    memcpy( salt, &passwds[0], 2 );
-    char* hash = crypt(pass, salt);
-    std::cout << "HASH: " << hash << std::endl;//a5FptUGIeJaBA
+
+    //char salt[2];
+    //memcpy( salt, &passwds[0], 2 );
+    //char* hash = crypt(pass, salt);
+    //std::cout << "HASH: " << hash << std::endl;//a5FptUGIeJaBA
 
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
