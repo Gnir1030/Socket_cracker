@@ -135,6 +135,8 @@ int main() {
     char salt[2];
     memcpy( salt, &passwds[0], 2 );
     char* hash = crypt(pass, salt);
+    hash = crypt(pass, salt);
+    hash = crypt(pass, salt);
     std::cout << "HASH: " << hash << std::endl;
 
 /*
