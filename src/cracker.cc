@@ -25,7 +25,7 @@
  * 
  * @return int not checked by test harness
  */
-void pcrack(const char *alphabet, const char *hash, char* buffer, char *passwd, unsigned int split, unsigned int threads, std::mutex& iMutex){
+void pcrack(const char *alphabet, const char *hash, const char *salt, char* buffer, char *passwd, unsigned int split, unsigned int threads, std::mutex& iMutex){
     //char a[5]; //4 char password
     //char salt[3];
     //memcpy( salt, &hash[0], 2 ); // first two character as salt
@@ -40,18 +40,18 @@ void pcrack(const char *alphabet, const char *hash, char* buffer, char *passwd, 
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     buffer[3] = alphabet[p];
                     char hc[14];
-                    strcpy(hc, crypt(buffer, hash));
+                    strcpy(hc, crypt(buffer, salt));
                     int cmp = strcmp(hc, hash);
                     if(buffer[0] == 'z' && buffer[1] == 'U' && buffer[2] == 'S' && buffer[3] == '0'){
                         std::cout << "\nthread: " << threads << "\ncharacter: " << buffer << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc
-                        << "\nsalt: " << hash << "\npasswd:" << passwd <<std::endl;
+                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
                     if(cmp == 0){
                         std::lock_guard<std::mutex> lock(iMutex);
                         //memcpy( passwd, &a[0], 5);
                         std::cout << "\nthread: " << threads << "\ncharacter: " << buffer << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc
-                        << "\nsalt: " << hash << "\npasswd:" << passwd <<std::endl;
+                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
                 }
@@ -116,8 +116,8 @@ int main() {
     unsigned int ssize = 24;
     char buffer[ssize][5];
     for(unsigned int i = 0; i < ssize; i++){
-        thrs.push_back(std::thread([&iMutex, &alphabet, &salt, &buffer, &pass, ssize, i]{
-            pcrack(alphabet, salt, buffer[i], pass, ssize, i, iMutex);
+        thrs.push_back(std::thread([&iMutex, &alphabet, &passwds, &salt, &buffer, &pass, ssize, i]{
+            pcrack(alphabet, passwds, salt, buffer[i], pass, ssize, i, iMutex);
             //std::cout << pass <<std::endl;
         }));
     }
