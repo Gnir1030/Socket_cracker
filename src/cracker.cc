@@ -49,6 +49,7 @@ int main() {
     //int n = recvfrom(sockfd, &buffer, 4999, 0, NULL, 0);
     if(n < 0) exit(-1);
 
+/*
     std::cout << buffer.alphabet << std::endl;
     strcpy(newBuffer.alphabet,buffer.alphabet);
     std::cout << buffer.hostname << std::endl;
@@ -59,16 +60,16 @@ int main() {
     newBuffer.num_passwds = buffer.num_passwds;
     std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
-
+*/
     std::vector<std::thread> thrs; // multithread vector
     //char password2[4];
-    char passArr[MAX_HASHES][HASH_LENGTH + 1]; // save passwords
+    //char passArr[MAX_HASHES][HASH_LENGTH + 1]; // save passwords
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&passArr,&buffer, i]{
-            crack(buffer.alphabet, buffer.passwds[i], passArr[i]);
-            std::cout << passArr[i] <<std::endl;
+            crack(buffer.alphabet, buffer.passwds[i], newBuffer.passwds[i]);
+            std::cout << newBuffer.passwds[i] <<std::endl;
         }));
     }
 
@@ -76,7 +77,7 @@ int main() {
         t.join(); // join threads vector
     }
 
-    std::copy(&passArr[0][0], &passArr[0][0] + MAX_HASHES * (HASH_LENGTH + 1), &newBuffer.passwds[0][0]);
+    //std::copy(&passArr[0][0], &passArr[0][0] + MAX_HASHES * (HASH_LENGTH + 1), &newBuffer.passwds[0][0]);
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
