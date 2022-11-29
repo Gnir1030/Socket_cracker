@@ -107,7 +107,7 @@ int main() {
     char pass[5] = "!!!!";
 //zUS0
     std::mutex iMutex;
-    unsigned int ssize = 16;
+    unsigned int ssize = 23;
     for(unsigned int i = 0; i < ssize; i++){
         thrs.push_back(std::thread([&iMutex, &alphabet, &passwds, &pass, ssize, i]{
             pcrack(alphabet, passwds, pass, ssize, i, iMutex);
