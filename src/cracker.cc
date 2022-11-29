@@ -32,6 +32,11 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
 
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
         a[0] = alphabet[i];
+        std::cout << a << std::endl;
+        std::cout << alphabet << std::endl;
+        std::cout << hash << std::endl;
+        std::cout << passwd << std::endl;
+        
         for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
             a[1] = alphabet[j];
             for(unsigned int k = 0; k <  ALPHABET_LEN; k++){
@@ -46,10 +51,6 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 }
             }
         }
-        std::cout << a << std::endl;
-        std::cout << alphabet << std::endl;
-        std::cout << hash << std::endl;
-        std::cout << passwd << std::endl;
     }
 }
 
