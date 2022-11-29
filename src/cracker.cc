@@ -10,6 +10,8 @@
 #include <thread>
 #include <vector>
 #include <mutex>
+#include <sys/socket.h>
+#include <netdb.h>
 #include "cracker.h"
 #include <unistd.h>
 
@@ -73,11 +75,13 @@ int main() {
         t.join(); // join threads vector
     }
 
-    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-        std::cout << passArr[i] <<std::endl;
+    for(int i = 0; i < MAX_HASHES; i++){
+        strcpy(newBuffer.passwds[i], passArr[i]);
     }
 
-    newBuffer.passwds = passArr;
+    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+        std::cout << newBuffer.passwds[i] <<std::endl;
+    }
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
@@ -91,7 +95,7 @@ int main() {
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
 
-    struct hostent *server = gethostname(buffer.hostname, MAX_HOSTNAME_LEN);
+    struct hostent *server = gethostbyname(buffer.hostname);
     if(server == NULL) exit(-1);
 
     struct sockaddr_in serv_addr;
