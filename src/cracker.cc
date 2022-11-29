@@ -44,7 +44,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     a[3] = alphabet[p];
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         //memcpy( passwd, &a[0], 5);
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\ncrypt(a,salt):" << crypt_r(a, salt, &data)
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
