@@ -25,32 +25,32 @@
  * 
  * @return int not checked by test harness
  */
-void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads, std::mutex& iMutex){
-    char a[5]; //4 char password
-    char salt[3];
-    memcpy( salt, &hash[0], 2 ); // first two character as salt
+void pcrack(const char *alphabet, const char *hash, char** buffer, char *passwd, unsigned int split, unsigned int threads, std::mutex& iMutex){
+    //char a[5]; //4 char password
+    //char salt[3];
+    //memcpy( salt, &hash[0], 2 ); // first two character as salt
 
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
-        a[0] = alphabet[i];
+        buffer[threads][0] = alphabet[i];
         for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
-            a[1] = alphabet[j];
+            buffer[threads][1] = alphabet[j];
             for(unsigned int k = 0; k <  ALPHABET_LEN; k++){
-                a[2] = alphabet[k];
+                buffer[threads][2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
-                    a[3] = alphabet[p];
+                    buffer[threads][3] = alphabet[p];
                     char hc[14];
-                    strcpy(hc, crypt(a, salt));
+                    strcpy(hc, crypt(buffer[threads], hash));
                     int cmp = strcmp(hc, hash);
-                    if(a[0] == 'z' && a[1] == 'U' && a[2] == 'S' && a[3] == '0'){
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << crypt(a, salt)
-                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
+                    if(buffer[threads][0] == 'z' && buffer[threads][1] == 'U' && buffer[threads][2] == 'S' && buffer[threads][3] == '0'){
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << buffer[threads] << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc
+                        << "\nsalt: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
                     if(cmp == 0){
                         std::lock_guard<std::mutex> lock(iMutex);
                         //memcpy( passwd, &a[0], 5);
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc 
-                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << buffer[threads] << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc
+                        << "\nsalt: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
                 }
@@ -106,11 +106,14 @@ int main() {
     char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2"; //hashcode
     char pass[5] = "!!!!";
 //zUS0
+    char salt[3];
+    memcpy( salt, &passwds[0], 2 );
     std::mutex iMutex;
     unsigned int ssize = 2;
+    char buffer[ssize][5];
     for(unsigned int i = 0; i < ssize; i++){
-        thrs.push_back(std::thread([&iMutex, &alphabet, &passwds, &pass, ssize, i]{
-            pcrack(alphabet, passwds, pass, ssize, i, iMutex);
+        thrs.push_back(std::thread([&iMutex, &alphabet, &salt, &buffer, &pass, ssize, i]{
+            pcrack(alphabet, salt, buffer, pass, ssize, i, iMutex);
             //std::cout << pass <<std::endl;
         }));
     }
@@ -140,8 +143,8 @@ int main() {
     }
 */
 
-    char salt[2];
-    memcpy( salt, &passwds[0], 2 );
+    //char salt[2];
+    //memcpy( salt, &passwds[0], 2 );
     char* hash = crypt(pass, salt);
     std::cout << "HASH: " << hash << std::endl;//a5FptUGIeJaBA
 
