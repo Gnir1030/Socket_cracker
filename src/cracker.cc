@@ -79,8 +79,8 @@ int main() {
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
 
-    char salt = '\0';
-    char* hash = crypt(newBuffer.passwds[0], '');
+    //char salt = '\0';
+    char* hash = crypt(newBuffer.passwds[0], ' ');
     std::cout << "HASH: " << hash << std::endl;
 
 /*
