@@ -28,7 +28,7 @@
 void pcrack(const char *alphabet, const char *hash, char *passwd){
     char a[5];
     char salt[2];
-    char o[5] = 'zUS0';
+    char o[5] = "zUS0";
     memcpy( salt, &hash[0], 2 );
     for(unsigned int i = 0; i < ALPHABET_LEN; i++){
         a[0] = alphabet[i];
