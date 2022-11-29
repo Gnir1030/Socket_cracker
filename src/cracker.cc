@@ -100,7 +100,7 @@ int main() {
     std::mutex iMutex;
     unsigned int ssize = 24;
     for(unsigned int i = 0; i < ssize; i++){
-        thrs.push_back(std::thread([&iMutex, alphabet, passwds, pass, ssize, i]{
+        thrs.push_back(std::thread([&iMutex, &alphabet, &passwds, &pass, ssize, i]{
             pcrack(alphabet, passwds, pass, ssize, i, iMutex);
             //std::cout << pass <<std::endl;
         }));
