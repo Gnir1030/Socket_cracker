@@ -84,7 +84,7 @@ int main() {
     }
 
     //char* salt = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/.';
-    char* hash = crypt(newBuffer.passwds[0], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/.');
+    char* hash = crypt(newBuffer.passwds[0]);
     std::cout << "HASH: " << hash << std::endl;
 
 /*
