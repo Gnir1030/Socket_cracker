@@ -91,7 +91,7 @@ int main() {
     std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
 
-    std::vector<std::thread> thrs; // multithread vector
+    //std::vector<std::thread> thrs; // multithread vector
 
     //char alphabet[ALPHABET_LEN + 1] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //char range
     //char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2"; //hashcode
@@ -113,6 +113,7 @@ int main() {
 
     unsigned int ssize = 24;
     for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k++){
+        std::vector<std::thread> thrs;
         /*
         std::cout << buffer.passwds[i] <<std::endl;
         thrs.push_back(std::thread([&newBuffer,&buffer, i]{
