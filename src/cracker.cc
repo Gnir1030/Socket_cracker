@@ -41,7 +41,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     if(strcmp(crypt(a, salt), hash) == 0){
                         //std::lock_guard<std::mutex> lock(iMutex);
                         //memcpy( passwd, &a[0], 5);
-                        //std::cout << crypt(a, salt) <<std::endl;
+                        std::cout << "!" << crypt(a, salt) <<std::endl;
                         return;
                     }
                 }
