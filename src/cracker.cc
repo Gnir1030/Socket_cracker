@@ -91,7 +91,7 @@ int main() {
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
 
-    struct hostent *server = gethostname(buffer.hostname);
+    struct hostent *server = gethostname(buffer.hostname, MAX_HOSTNAME_LEN);
     if(server == NULL) exit(-1);
 
     struct sockaddr_in serv_addr;
