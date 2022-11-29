@@ -38,8 +38,6 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
-                    char* a1 = a;
-                    char* salt1 = salt;
                     char hc[14];
                     strcpy(hc, crypt(a, salt));
                     int cmp = strcmp(hc, hash);
