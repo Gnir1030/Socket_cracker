@@ -25,7 +25,7 @@
  * 
  * @return int not checked by test harness
  */
-void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
+void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads, std::mutex iMutex){
     char a[5];
     char salt[2];
     memcpy( salt, &hash[0], 2 );
@@ -38,12 +38,10 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
-                    /*
                     if(strcmp(crypt(a, salt), hash) == 0){
+                        std::lock_guard(iMutex);
                         memcpy( passwd, &a[0], 5);
-                        return;
                     }
-                    */
                 }
             }
         }
@@ -97,11 +95,11 @@ int main() {
     char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2";
     char pass[5] = "!!!!";
 //zUS0
-
+    std::mutex iMutex;
     unsigned int ssize = 24;
     for(unsigned int i = 0; i < ssize; i++){
-        thrs.push_back(std::thread([&alphabet, &passwds, &pass, ssize, i]{
-            pcrack(alphabet, passwds, pass, ssize, i);
+        thrs.push_back(std::thread([&iMutex, &alphabet, &passwds, &pass, ssize, i]{
+            pcrack(alphabet, passwds, pass, ssize, i, iMutex);
         }));
     }
 
