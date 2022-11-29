@@ -38,10 +38,12 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
-                    if(strcmp(crypt(a, salt), hash) == 0){
+                    char* hc = crypt(a, salt);
+                    int cmp = strcmp(hc, hash);
+                    if(cmp == 0){
                         std::lock_guard<std::mutex> lock(iMutex);
                         //memcpy( passwd, &a[0], 5);
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< strcmp(crypt(a, salt), hash) << "\ncrypt(a,salt):" << crypt(a, salt) 
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc 
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
@@ -135,9 +137,7 @@ int main() {
     char salt[2];
     memcpy( salt, &passwds[0], 2 );
     char* hash = crypt(pass, salt);
-    hash = crypt(pass, salt);
-    hash = crypt(pass, salt);
-    std::cout << "HASH: " << hash << std::endl;
+    std::cout << "HASH: " << hash << std::endl;//a5FptUGIeJaBA
 
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
