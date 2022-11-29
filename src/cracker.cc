@@ -38,13 +38,15 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
+                    char* a1 = a;
+                    char* salt1 = salt;
                     char* hc = crypt(a, salt);
                     int cmp = strcmp(hc, hash);
                     if(cmp == 0){
                         std::lock_guard<std::mutex> lock(iMutex);
                         //memcpy( passwd, &a[0], 5);
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\nstrcmp(crypt(a, salt), hash): "<< strcmp(hc, hash) << "\ncrypt(a,salt):" << hc 
-                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a1 << "\nstrcmp(crypt(a, salt), hash): "<< cmp << "\ncrypt(a,salt):" << hc 
+                        << "\nsalt: " << salt1 << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
                 }
