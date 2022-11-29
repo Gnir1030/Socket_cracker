@@ -46,6 +46,8 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
             }
         }
         std::cout << a << std::endl;
+        std::cout << alphabet << std::endl;
+        std::cout << passwds << std::endl;
     }
 }
 
