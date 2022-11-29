@@ -112,7 +112,7 @@ int main() {
     std::cout << salt <<std::endl;
 
     std::mutex iMutex;
-    unsigned int ssize = 2;
+    unsigned int ssize = 24;
     char buffer[ssize][5];
     for(unsigned int i = 0; i < ssize; i++){
         thrs.push_back(std::thread([&iMutex, &alphabet, &salt, &buffer, &pass, ssize, i]{
