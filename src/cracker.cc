@@ -43,10 +43,8 @@ int main() {
 
     Message buffer; //recipent buffer
     Message newBuffer; //sender buffer
-    //char buffer[5000];
 
     int n = recvfrom(sockfd, (void*)&buffer, sizeof(buffer), 0, NULL, 0); //receive data
-    //int n = recvfrom(sockfd, &buffer, 4999, 0, NULL, 0);
     if(n < 0) exit(-1);
 
 
@@ -62,8 +60,6 @@ int main() {
     newBuffer.port = buffer.port;
 
     std::vector<std::thread> thrs; // multithread vector
-    //char password2[4];
-    //char passArr[MAX_HASHES][HASH_LENGTH + 1]; // save passwords
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
@@ -84,7 +80,7 @@ int main() {
     }
 
     char salt = '\0';
-    char* hash = crypt(newBuffer.passwds[0], &salt);
+    char* hash = crypt(newBuffer.passwds[0], '');
     std::cout << "HASH: " << hash << std::endl;
 
 /*
