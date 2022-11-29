@@ -98,6 +98,7 @@ int main() {
     unsigned int ssize = 24;
     for(unsigned int i = 0; i < ssize; i++){
         thrs.push_back(std::thread([&alphabet, &passwds, &pass, ssize, i]{
+            std::cout << pass << std::endl;
             pcrack(alphabet, passwds, pass, ssize, i);
         }));
     }
