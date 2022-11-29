@@ -29,16 +29,16 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
     char a[5];
     char salt[2];
     memcpy( salt, &hash[0], 2 );
-    for(int i = 0; i < sizeof(alphabet)/sizeof(char); i++){
+    for(unsigned int i = 0; i < sizeof(alphabet)/sizeof(char); i++){
         a[0] = alphabet[i];
-        for(int j = 0; j < sizeof(alphabet)/sizeof(char); j++){
+        for(unsigned int j = 0; j < sizeof(alphabet)/sizeof(char); j++){
             a[1] = alphabet[j];
-            for(int k = 0; k < sizeof(alphabet)/sizeof(char); k++){
+            for(unsigned int k = 0; k < sizeof(alphabet)/sizeof(char); k++){
                 a[2] = alphabet[k];
-                for(int p = 0; p < sizeof(alphabet)/sizeof(char); p++){
+                for(unsigned int p = 0; p < sizeof(alphabet)/sizeof(char); p++){
                     a[3] = alphabet[p];
                     if(crypt(a, salt) == hash){
-                        memcpy( passwd, a[0], 5);
+                        memcpy( passwd, &a[0], 5);
                         return;
                     }
                 }
