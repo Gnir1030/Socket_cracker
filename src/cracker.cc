@@ -125,6 +125,8 @@ int main() {
   
     }
 */
+
+/*
     close(sockfd);
 
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
@@ -145,4 +147,5 @@ int main() {
     if(s < 0) exit(-1);
 
     close(sendsock);
+    */
 }
