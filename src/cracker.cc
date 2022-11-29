@@ -25,12 +25,12 @@
  * 
  * @return int not checked by test harness
  */
-void pcrack(const char *alphabet, const char *hash, char *passwd){
+void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
     char a[5];
     char salt[2];
-    //char o[5] = "zUS0";
     memcpy( salt, &hash[0], 2 );
-    for(unsigned int i = 0; i < ALPHABET_LEN; i++){
+
+    for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
         a[0] = alphabet[i];
         for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
             a[1] = alphabet[j];
@@ -39,12 +39,6 @@ void pcrack(const char *alphabet, const char *hash, char *passwd){
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
                     a[3] = alphabet[p];
                     if(strcmp(crypt(a, salt), hash) == 0){
-                        std::cout << "suc" << std::endl;
-                        memcpy( passwd, &a[0], 5);
-                        return;
-                    }
-                    if(a[0] == 'z' && a[1] == 'U' && a[2] == 'S' && a[3] == '0'){
-                        std::cout << crypt(a, salt) <<std::endl;
                         memcpy( passwd, &a[0], 5);
                         return;
                     }
@@ -98,7 +92,7 @@ int main() {
     char passwds[HASH_LENGTH + 1] = "a5LrgVquuk6a2";
     char pass[5];
 //zUS0
-    pcrack(alphabet, passwds, pass);
+    pcrack(alphabet, passwds, pass, 24, 0);
     std::cout << pass <<std::endl;
 /*
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
