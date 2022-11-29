@@ -80,7 +80,7 @@ int main() {
     }
 
     //char salt = '\0';
-    char* hash = crypt(newBuffer.passwds[0], 'a/');
+    char* hash = crypt(newBuffer.passwds[0], "a/");
     std::cout << "HASH: " << hash << std::endl;
 
 /*
