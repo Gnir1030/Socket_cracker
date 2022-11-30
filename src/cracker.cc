@@ -235,7 +235,9 @@ int main() {
         for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
             std::cout << buffer.passwds[k] <<std::endl;
-
+            //
+            strcpy(newBuffer.passwds[k], "!!!!"); 
+            //
             for(unsigned int i = 0; i < ssize ; i++){
                 thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
                     pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
