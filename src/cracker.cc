@@ -107,12 +107,12 @@ int main() {
             t.join(); // join threads vector
         }
     }
+
     */
-
-
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-        std::cout << newBuffer.passwds[i] <<std::endl;
+        std::cout << buffer.passwds[i] <<std::endl;
     }
+    
 
 // Crack passwords  
     char hostname[10];
@@ -132,6 +132,10 @@ int main() {
             for(auto& t: thrs){
                 t.join(); // join threads vector
             }
+        }
+
+        for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+            std::cout << newBuffer.passwds[i] <<std::endl;
         }
         
         fd_set readfds;
@@ -160,7 +164,7 @@ int main() {
         }
 
         int counter = 0;
-        while( counter < 3){
+        while(counter < 3){
             int status = -1;
             for(int sock: sockets)
                 FD_SET(sock, &readfds);
@@ -235,6 +239,10 @@ int main() {
             for(auto& t: thrs){
                 t.join(); // join threads vector
             }
+        }
+
+        for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+            std::cout << newBuffer.passwds[i] <<std::endl;
         }
 
         if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
