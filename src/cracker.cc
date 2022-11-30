@@ -6,7 +6,7 @@
  */
 //#define _GNU_SOURCE
 #include <crypt.h>
-#incldue <time.h>
+#include <time.h>
 #include <iostream>
 #include <thread>
 #include <vector>
