@@ -121,7 +121,6 @@ int main() {
         fd_set readfds;
         struct timeval tv;
         //char buffer[256];
-        Message Rbuffer;
 
         int maxfd = 0;
         std::vector<int> sockets;
@@ -152,6 +151,7 @@ int main() {
             
             tv.tv_sec = 2;
             int rc = select(maxfd + 1, &readfds, 0,0, &tv);
+            std::cout << rc << std::endl;
             if(rc == 0){
                 printf("Timeout\n");
                 continue;
@@ -166,6 +166,7 @@ int main() {
 
             if(sockfd == -1) continue;
 
+            Message Rbuffer;
             struct sockaddr_in client_addr;
             socklen_t len = sizeof(client_addr);
 
@@ -174,7 +175,7 @@ int main() {
             //bzero(buffer, 256);
             int status = recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
             if(status >= 0) counter++;
-            
+
             struct sockaddr_in master_addr;
             getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
 
