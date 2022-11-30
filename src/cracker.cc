@@ -215,7 +215,7 @@ int main() {
 
             close(newsockfd);
         }
-        for(unsigned int i = 0; i < ntohl(Rbuffer.num_passwds); i++){
+        for(unsigned int i = 0; i < ntohl(newBuffer.num_passwds); i++){
             //strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
             std::cout << newBuffer.passwds[i] << std::endl;
         }
@@ -253,7 +253,7 @@ int main() {
             }
         }
 
-        strcopy(newBuffer.hostname, hostname);
+        strcpy(newBuffer.hostname, hostname);
 
         for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
             std::cout << newBuffer.passwds[i] <<std::endl;
