@@ -55,7 +55,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
 
 
 int main() {
-
+/*
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
@@ -79,6 +79,7 @@ int main() {
     if(n < 0) exit(-1);
 
     close(sockfd);
+//Receive Message from Test/Grade Server
 
     std::cout << buffer.alphabet << std::endl;
     strcpy(newBuffer.alphabet,buffer.alphabet);
@@ -93,7 +94,7 @@ int main() {
 
 
     unsigned int ssize = 24;
-    for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k= k + 4){
+    for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k++){
         std::vector<std::thread> thrs;
         std::cout << buffer.passwds[k] <<std::endl;
 
@@ -112,8 +113,12 @@ int main() {
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
-    
+*/
+// Crack passwords  
 
+    std::cout << gethostname() << std::endl;
+
+/*
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
 
@@ -132,5 +137,7 @@ int main() {
     if(s < 0) exit(-1);
 
     close(sendsock);
+*/
+// Send new Message to the Server 
 
 }
