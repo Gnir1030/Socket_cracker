@@ -133,10 +133,6 @@ int main() {
                 t.join(); // join threads vector
             }
         }
-
-        for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-            std::cout << newBuffer.passwds[i] <<std::endl;
-        }
         
         fd_set readfds;
         struct timeval tv;
@@ -222,6 +218,7 @@ int main() {
 
     }
     else{
+        unsigned int st;
         int sockfd = socket(AF_INET, SOCK_STREAM, 0);
         if(sockfd < 0) exit(-1);
 
@@ -232,7 +229,6 @@ int main() {
         bzero((char*) &serv_addr, sizeof(serv_addr));
         serv_addr.sin_family = AF_INET;
         bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
-        unsigned int st;
         if(strcmp(hostname, "nogbad") == 0) {serv_addr.sin_port = htons(5001); st = 1;}
         else if(strcmp(hostname, "thor") == 0) {serv_addr.sin_port = htons(5002); st = 2;}
         else {serv_addr.sin_port = htons(5003); st = 3;}
@@ -254,16 +250,8 @@ int main() {
         }
 
         strcpy(newBuffer.hostname, hostname);
-
-        for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-            std::cout << newBuffer.passwds[i] <<std::endl;
-        }
-
         while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
-
-        //int n = write(sockfd, newBuffer, sizeof(newBuffer));
         send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
-        //if(n < 0) exit(-1);
 /*
         char buffer[256];
         bzero(buffer, 256);
