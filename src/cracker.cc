@@ -47,9 +47,11 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                         //<< "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
+                    /*
                     if(strcmp(passwd, "!!!!") != 0){
                         return;
                     }
+                    */
                 }
             }
         }
