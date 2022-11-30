@@ -61,6 +61,11 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
     }
 }
 
+typedef struct subcontainer {
+    char passwds[MAX_HASHES][HASH_LENGTH+1]; // NUM_PASSWD plain text passwords or password hashes
+    char hostname[MAX_HOSTNAME_LEN];         // Host to return decrypted passwords to over TCP
+}
+Sub;
 
 int main() {
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
@@ -171,7 +176,7 @@ int main() {
 
             if(sockfd == -1) continue;
 
-            Message Rbuffer;
+            Sub Rbuffer;
             struct sockaddr_in client_addr;
             socklen_t len = sizeof(client_addr);
 
@@ -234,16 +239,17 @@ int main() {
         else if(strcmp(hostname, "thor") == 0) {serv_addr.sin_port = htons(5002); st = 2;}
         else {serv_addr.sin_port = htons(5003); st = 3;}
 
+        Sub sBuffer;
         unsigned int ssize = 24;
         for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
             std::cout << buffer.passwds[k] <<std::endl;
             //
-            strcpy(newBuffer.passwds[k], "!!!!"); 
+            strcpy(sBuffer.passwds[k], "!!!!"); 
             //
             for(unsigned int i = 0; i < ssize ; i++){
-                thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
-                    pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
+                thrs.push_back(std::thread([&buffer, &sBuffer, ssize, i, k]{
+                    pcrack(buffer.alphabet, buffer.passwds[k], sBuffer.passwds[k], ssize, i);
                 }));
             }
 
@@ -252,9 +258,9 @@ int main() {
             }
         }
 
-        strcpy(newBuffer.hostname, hostname);
+        strcpy(sBuffer.hostname, hostname);
         while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
-        send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
+        send(sockfd, (void*) &sBuffer, sizeof(sBuffer), 0);
 
         close(sockfd);
     }
