@@ -80,20 +80,20 @@ int main() {
     close(sockfd);
 //Receive Message from Test/Grade Server
 
-    std::cout << buffer.alphabet << std::endl;
+    //std::cout << buffer.alphabet << std::endl;
     strcpy(newBuffer.alphabet,buffer.alphabet);
-    std::cout << buffer.hostname << std::endl;
+    //std::cout << buffer.hostname << std::endl;
     strcpy(newBuffer.hostname,buffer.hostname);
-    std::cout << buffer.cruzid << std::endl;
+    //std::cout << buffer.cruzid << std::endl;
     strcpy(newBuffer.cruzid,buffer.cruzid);
-    std::cout << ntohl(buffer.num_passwds) << std::endl;
+    //std::cout << ntohl(buffer.num_passwds) << std::endl;
     newBuffer.num_passwds = buffer.num_passwds;
-    std::cout << ntohl(buffer.port) << std::endl;
+    //std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
 
-
+/*
     unsigned int ssize = 24;
-    for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k++){
+    for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
         std::vector<std::thread> thrs;
         std::cout << buffer.passwds[k] <<std::endl;
 
@@ -107,6 +107,7 @@ int main() {
             t.join(); // join threads vector
         }
     }
+    */
 
 
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
@@ -117,10 +118,25 @@ int main() {
     char hostname[10];
     gethostname(hostname, 10);
     if(strcmp(hostname, "noggin") == 0){
+        unsigned int ssize = 24;
+        for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
+            std::vector<std::thread> thrs;
+            std::cout << buffer.passwds[k] <<std::endl;
+
+            for(unsigned int i = 0; i < ssize ; i++){
+                thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
+                    pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
+                }));
+            }
+
+            for(auto& t: thrs){
+                t.join(); // join threads vector
+            }
+        }
+        
         fd_set readfds;
         struct timeval tv;
         //char buffer[256];
-
         int maxfd = 0;
         std::vector<int> sockets;
         int port = 5001;
@@ -200,9 +216,26 @@ int main() {
         bzero((char*) &serv_addr, sizeof(serv_addr));
         serv_addr.sin_family = AF_INET;
         bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
-        if(strcmp(hostname, "nogbad") == 0) serv_addr.sin_port = htons(5001);
-        else if(strcmp(hostname, "thor") == 0) serv_addr.sin_port = htons(5002);
-        else serv_addr.sin_port = htons(5003);
+        unsigned int st;
+        if(strcmp(hostname, "nogbad") == 0) {serv_addr.sin_port = htons(5001); st = 1}
+        else if(strcmp(hostname, "thor") == 0) {serv_addr.sin_port = htons(5002); st = 2}
+        else {serv_addr.sin_port = htons(5003); st = 3}
+
+        unsigned int ssize = 24;
+        for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
+            std::vector<std::thread> thrs;
+            std::cout << buffer.passwds[k] <<std::endl;
+
+            for(unsigned int i = 0; i < ssize ; i++){
+                thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
+                    pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
+                }));
+            }
+
+            for(auto& t: thrs){
+                t.join(); // join threads vector
+            }
+        }
 
         if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
