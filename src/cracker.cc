@@ -117,7 +117,100 @@ int main() {
 // Crack passwords  
     char hostname[10];
     gethostname(hostname, 10);
-    std::cout << hostname << std::endl;
+    if(strcmp(hostname, "noggin") == 0){
+        fd_set readfds;
+        struct timeval tv;
+        char buffer[256];
+
+        int maxfd = 0;
+        std::vector<int> sockets;
+        int port = 5001;
+        for(int i = 1; i < 4; i++){
+            int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+            struct sockaddr_in master_addr;
+            bzero((char*) &master_addr, sizeof(master_addr));
+            master_addr.sin_family = AF_INET;
+            master_addr.sin_port = htons(port);
+
+            bind(sockfd, (struct sockaddr*) &master_addr, sizeof(master_addr));
+
+            listen(sockfd, 5);
+            printf("Listening on port: %d\n", port);
+
+            FD_SET(sockfd, &readfds);
+            if(sockfd > maxfd) maxfd = sockfd;
+            sockets.push_back(sockfd);
+            port++;
+        }
+
+        for(;;){
+            for(int sock: sockets)
+                FD_SET(sock, &readfds);
+            
+            tv.tv_sec = 2;
+            int rc = select(maxfd + 1, &readfds, 0,0, &tv);
+            if(rc == 0){
+                printf("Timeout\n");
+                continue;
+            }
+            int sockfd = -1;
+            for(int sock: sockets){
+                if(FD_ISSET(sock, &readfds)){
+                    sockfd = sock;
+                    break;
+                }
+            }
+
+            if(sockfd == -1) continue;
+
+            struct sockaddr_in client_addr;
+            socklen_t len = sizeof(client_addr);
+
+            int newsockfd = accept(sockfd, (struct sockaddr*) &client_addr, &len);
+
+            bzero(buffer, 256);
+            recv(newsockfd, buffer, 255, 0);
+            struct sockaddr_in master_addr;
+            getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
+
+            printf("Port %u Recieved: %s\n", ntohs(master_addr.sin_port), buffer);
+
+            send(newsockfd, buffer,strlen(buffer),0);
+
+            close(newsockfd);
+        }
+    }
+    else{
+        int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+        if(sockfd < 0) exit(-1);
+
+        struct hostent *server = gethostbyname("noggin");
+        if(server == NULL) exit(-1);
+
+        struct sockaddr_in serv_addr;
+        bzero((char*) &serv_addr, sizeof(serv_addr));
+        serv_addr.sin_family = AF_INET;
+        bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
+        if(strcmp(hostname, "nogbad") == 0) serv_addr.sin_port = htons(5001);
+        else if(strcmp(hostname, "thor") == 0) serv_addr.sin_port = htons(5002);
+        else serv_addr.sin_port = htons(5003);
+
+        if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
+
+        char* a = "hello world";
+        int n = write(sockfd, a, strlen(a));
+        if(n < 0) exit(-1);
+
+        char buffer[256];
+        bzero(buffer, 256);
+        n = read(sockfd, buffer,255);
+        if(n < 0) exit(-1);
+
+        printf("Received: %s\n", buffer);
+
+        close(sockfd);
+    }
 
 /*
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
