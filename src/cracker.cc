@@ -6,6 +6,7 @@
  */
 //#define _GNU_SOURCE
 #include <crypt.h>
+#incldue <time.h>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -28,6 +29,8 @@
 void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
     char a[5]; //4 char password
     char salt[3];
+    clock_t start, end;
+    start = clock();
     memcpy( salt, &hash[0], 2); // first two character as salt
     struct crypt_data data;
     data.initialized = 0;
@@ -44,8 +47,9 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     a[3] = alphabet[p];
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         memcpy( passwd, &a[0], 5);
+                        end = clock();
                         std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\ncrypt(a,salt):" << crypt_r(a, salt, &data)
-                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
+                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " << (double)(end -start) <<std::endl;
                         return;
                     }
                     if(strcmp(passwd, "!!!!") != 0){
