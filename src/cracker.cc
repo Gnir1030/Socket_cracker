@@ -176,7 +176,7 @@ int main() {
             getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
 
             //printf("Port %u Recieved: %s\n", ntohs(master_addr.sin_port), buffer);
-            for(int i = 0; i < Rbuffer.num_passwds; i++){
+            for(unsigned int i = 0; i < Rbuffer.num_passwds; i++){
                 std::cout << Rbuffer.passwds[i] << std:: endl;
             }
             //send(newsockfd, buffer,strlen(buffer),0);
