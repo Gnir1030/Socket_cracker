@@ -55,7 +55,6 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
 
 
 int main() {
-
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
@@ -151,7 +150,6 @@ int main() {
             
             tv.tv_sec = 2;
             int rc = select(maxfd + 1, &readfds, 0,0, &tv);
-            std::cout << rc << std::endl;
             if(rc == 0){
                 printf("Timeout\n");
                 continue;
@@ -174,16 +172,18 @@ int main() {
 
             //bzero(buffer, 256);
             int status = recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
-            if(status >= 0) counter++;
+            if(status >= 0) {
+                for(unsigned int i = 0; i < Rbuffer.num_passwds; i++){
+                    std::cout << Rbuffer.passwds[i] << std:: endl;
+                }
+                counter++;
+            }
 
-            struct sockaddr_in master_addr;
-            getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
+            //struct sockaddr_in master_addr;
+            //getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
 
             //printf("Port %u Recieved: %s\n", ntohs(master_addr.sin_port), buffer);
-            for(unsigned int i = 0; i < Rbuffer.num_passwds; i++){
-                std::cout << Rbuffer.passwds[i] << std:: endl;
-            }
-            //send(newsockfd, buffer,strlen(buffer),0);
+            //send(newsockfd, (void*) &Rbuffer ,sizeof(Rbuffer),0);
 
             close(newsockfd);
         }
