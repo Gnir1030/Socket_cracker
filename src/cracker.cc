@@ -115,8 +115,8 @@ int main() {
     
 
 // Crack passwords  
-    char hostname[10];
-    gethostname(hostname, 10);
+    char hostname[7];
+    gethostname(hostname, 7);
     if(strcmp(hostname, "noggin") == 0){
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
@@ -192,9 +192,16 @@ int main() {
             int newsockfd = accept(sockfd, (struct sockaddr*) &client_addr, &len);
 
             //bzero(buffer, 256);
+            unsigned int st;
             status = recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
+
             if(status >= 0) {
-                for(unsigned int i = 0; i < ntohl(Rbuffer.num_passwds); i++){
+                if(strcmp(Rbuffer.hostname, "nogbad") == 0) st = 1;
+                else if(strcmp(Rbuffer.hostname, "thor") == 0) st = 2;
+                else st = 3;
+
+                for(unsigned int i = st; i < ntohl(Rbuffer.num_passwds); i = i + 4){
+                    strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
                     std::cout << Rbuffer.passwds[i] << std:: endl;
                 }
                 counter++;
@@ -208,6 +215,11 @@ int main() {
 
             close(newsockfd);
         }
+        for(unsigned int i = 0; i < ntohl(Rbuffer.num_passwds); i++){
+            //strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
+            std::cout << newBuffer.passwds[i] << std::endl;
+        }
+
     }
     else{
         int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -241,11 +253,13 @@ int main() {
             }
         }
 
+        strcopy(newBuffer.hostname, hostname);
+
         for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
             std::cout << newBuffer.passwds[i] <<std::endl;
         }
 
-        if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
+        while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
 
         //int n = write(sockfd, newBuffer, sizeof(newBuffer));
         send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
