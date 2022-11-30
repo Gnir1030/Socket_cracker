@@ -191,7 +191,7 @@ int main() {
                 else if(strcmp(Rbuffer.hostname, "thor") == 0) st = 2;
                 else st = 3;
 
-                for(unsigned int i = st; i < ntohl(Rbuffer.num_passwds); i = i + 4){
+                for(unsigned int i = st; i < ntohl(buffer.num_passwds); i = i + 4){
                     strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
                 }
                 counter++;
