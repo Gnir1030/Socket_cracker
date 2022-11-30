@@ -198,7 +198,7 @@ int main() {
 
         if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
-        char* a = "hello world";
+        char a[12] = "hello world";
         int n = write(sockfd, a, strlen(a));
         if(n < 0) exit(-1);
 
