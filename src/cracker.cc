@@ -145,7 +145,7 @@ int main() {
 
         int counter = 0;
         while( counter < 3){
-            int status = -1
+            int status = -1;
             for(int sock: sockets)
                 FD_SET(sock, &readfds);
             
@@ -172,7 +172,7 @@ int main() {
             int newsockfd = accept(sockfd, (struct sockaddr*) &client_addr, &len);
 
             //bzero(buffer, 256);
-            status = recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
+            int status = recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
             if(status >= 0) {
                 for(unsigned int i = 0; i < Rbuffer.num_passwds; i++){
                     std::cout << Rbuffer.passwds[i] << std:: endl;
