@@ -55,7 +55,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
 
 
 int main() {
-/*
+
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
@@ -113,14 +113,15 @@ int main() {
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << newBuffer.passwds[i] <<std::endl;
     }
-*/
+
 // Crack passwords  
     char hostname[10];
     gethostname(hostname, 10);
     if(strcmp(hostname, "noggin") == 0){
         fd_set readfds;
         struct timeval tv;
-        char buffer[256];
+        //char buffer[256];
+        Message Rbuffer;
 
         int maxfd = 0;
         std::vector<int> sockets;
@@ -169,14 +170,16 @@ int main() {
 
             int newsockfd = accept(sockfd, (struct sockaddr*) &client_addr, &len);
 
-            bzero(buffer, 256);
-            recv(newsockfd, buffer, 255, 0);
+            //bzero(buffer, 256);
+            recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
             struct sockaddr_in master_addr;
             getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
 
-            printf("Port %u Recieved: %s\n", ntohs(master_addr.sin_port), buffer);
-
-            send(newsockfd, buffer,strlen(buffer),0);
+            //printf("Port %u Recieved: %s\n", ntohs(master_addr.sin_port), buffer);
+            for(int i = 0; i < Rbuffer.num_passwds; i++){
+                std::cout << Rbuffer.passwds[i] << std:: endl;
+            }
+            //send(newsockfd, buffer,strlen(buffer),0);
 
             close(newsockfd);
         }
@@ -198,16 +201,17 @@ int main() {
 
         if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
-        char a[12] = "hello world";
-        int n = write(sockfd, a, strlen(a));
-        if(n < 0) exit(-1);
-
+        //int n = write(sockfd, newBuffer, sizeof(newBuffer));
+        send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
+        //if(n < 0) exit(-1);
+/*
         char buffer[256];
         bzero(buffer, 256);
         n = read(sockfd, buffer,255);
         if(n < 0) exit(-1);
 
         printf("Received: %s\n", buffer);
+    */
 
         close(sockfd);
     }
