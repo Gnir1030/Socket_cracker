@@ -28,10 +28,11 @@
 void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
     char a[5]; //4 char password
     char salt[3];
-    memcpy( salt, &hash[0], 3 ); // first two character as salt
+    memcpy( salt, &hash[0], 2); // first two character as salt
     struct crypt_data data;
     data.initialized = 0;
     a[4] = '\0';
+    salt[2] = '\0';
 
     for(unsigned int i = threads; i < MAX_HASHES; i = i + split){
         a[0] = alphabet[i];
