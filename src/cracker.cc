@@ -115,8 +115,8 @@ int main() {
     }
 */
 // Crack passwords  
-
-    std::cout << gethostname() << std::endl;
+    char hostname[10];
+    std::cout << gethostname(hostname, 10) << std::endl;
 
 /*
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
