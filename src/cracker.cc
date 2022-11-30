@@ -198,7 +198,7 @@ int main() {
 
                 for(unsigned int i = st; i < ntohl(Rbuffer.num_passwds); i = i + 4){
                     strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
-                    std::cout << Rbuffer.passwds[i] << std:: endl;
+                    //std::cout << Rbuffer.passwds[i] << std:: endl;
                 }
                 counter++;
             }
@@ -252,19 +252,11 @@ int main() {
         strcpy(newBuffer.hostname, hostname);
         while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
         send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
-/*
-        char buffer[256];
-        bzero(buffer, 256);
-        n = read(sockfd, buffer,255);
-        if(n < 0) exit(-1);
-
-        printf("Received: %s\n", buffer);
-    */
 
         close(sockfd);
     }
 
-/*
+
     int sendsock = socket(AF_INET, SOCK_STREAM, 0);
     if(sendsock < 0) exit(-1);
 
@@ -283,7 +275,6 @@ int main() {
     if(s < 0) exit(-1);
 
     close(sendsock);
-*/
 // Send new Message to the Server 
 
 }
