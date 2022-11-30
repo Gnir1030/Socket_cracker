@@ -47,6 +47,11 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd <<std::endl;
                         return;
                     }
+                    //
+                    if(strcmp(passwd, "!!!!") != 0){
+                        return;
+                    }
+                    //
                 }
             }
         }
@@ -80,35 +85,14 @@ int main() {
     close(sockfd);
 //Receive Message from Test/Grade Server
 
-    //std::cout << buffer.alphabet << std::endl;
+
     strcpy(newBuffer.alphabet,buffer.alphabet);
-    //std::cout << buffer.hostname << std::endl;
     strcpy(newBuffer.hostname,buffer.hostname);
-    //std::cout << buffer.cruzid << std::endl;
     strcpy(newBuffer.cruzid,buffer.cruzid);
-    //std::cout << ntohl(buffer.num_passwds) << std::endl;
     newBuffer.num_passwds = buffer.num_passwds;
-    //std::cout << ntohl(buffer.port) << std::endl;
     newBuffer.port = buffer.port;
 
-/*
-    unsigned int ssize = 24;
-    for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
-        std::vector<std::thread> thrs;
-        std::cout << buffer.passwds[k] <<std::endl;
 
-        for(unsigned int i = 0; i < ssize ; i++){
-            thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
-                pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
-            }));
-        }
-
-        for(auto& t: thrs){
-            t.join(); // join threads vector
-        }
-    }
-
-    */
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
     }
@@ -123,7 +107,9 @@ int main() {
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
             std::cout << buffer.passwds[k] <<std::endl;
-
+            //
+            strcpy(newBuffer.passwds[k], "!!!!"); 
+            //
             for(unsigned int i = 0; i < ssize ; i++){
                 thrs.push_back(std::thread([&buffer, &newBuffer, ssize, i, k]{
                     pcrack(buffer.alphabet, buffer.passwds[k], newBuffer.passwds[k], ssize, i);
