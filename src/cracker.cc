@@ -207,10 +207,7 @@ int main() {
         if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
         //int n = write(sockfd, newBuffer, sizeof(newBuffer));
-        int status = -1;
-        while(status < 0){
-            status = send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
-        }
+        send(sockfd, (void*) &newBuffer, sizeof(newBuffer), 0);
         //if(n < 0) exit(-1);
 /*
         char buffer[256];
