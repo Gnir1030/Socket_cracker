@@ -174,7 +174,7 @@ int main() {
             //bzero(buffer, 256);
             status = recv(newsockfd, (void*) &Rbuffer, sizeof(Rbuffer), 0);
             if(status >= 0) {
-                for(unsigned int i = 0; i < 5; i++){
+                for(unsigned int i = 0; i < ntohl(Rbuffer.num_passwds); i++){
                     std::cout << Rbuffer.passwds[i] << std:: endl;
                 }
                 counter++;
