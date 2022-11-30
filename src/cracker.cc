@@ -217,9 +217,9 @@ int main() {
         serv_addr.sin_family = AF_INET;
         bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
         unsigned int st;
-        if(strcmp(hostname, "nogbad") == 0) {serv_addr.sin_port = htons(5001); st = 1}
-        else if(strcmp(hostname, "thor") == 0) {serv_addr.sin_port = htons(5002); st = 2}
-        else {serv_addr.sin_port = htons(5003); st = 3}
+        if(strcmp(hostname, "nogbad") == 0) {serv_addr.sin_port = htons(5001); st = 1;}
+        else if(strcmp(hostname, "thor") == 0) {serv_addr.sin_port = htons(5002); st = 2;}
+        else {serv_addr.sin_port = htons(5003); st = 3;}
 
         unsigned int ssize = 24;
         for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
