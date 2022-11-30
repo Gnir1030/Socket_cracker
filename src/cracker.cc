@@ -114,10 +114,11 @@ int main() {
     }
     
 
-// Crack passwords  
+ 
     char hostname[7];
     gethostname(hostname, 7);
     if(strcmp(hostname, "noggin") == 0){
+//crack passwords
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
@@ -133,7 +134,7 @@ int main() {
                 t.join(); // join threads vector
             }
         }
-        
+//Noggin: master server 
         fd_set readfds;
         struct timeval tv;
         //char buffer[256];
@@ -158,7 +159,7 @@ int main() {
             sockets.push_back(sockfd);
             port++;
         }
-
+//loop while 3 client send messages
         int counter = 0;
         while(counter < 3){
             int status = -1;
@@ -198,25 +199,36 @@ int main() {
 
                 for(unsigned int i = st; i < ntohl(Rbuffer.num_passwds); i = i + 4){
                     strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
-                    //std::cout << Rbuffer.passwds[i] << std:: endl;
                 }
                 counter++;
             }
-
-            //struct sockaddr_in master_addr;
-            //getsockname(sockfd, (struct sockaddr*) &master_addr, &len);
-
-            //printf("Port %u Recieved: %s\n", ntohs(master_addr.sin_port), buffer);
-            //send(newsockfd, (void*) &Rbuffer ,sizeof(Rbuffer),0);
-
             close(newsockfd);
         }
         for(unsigned int i = 0; i < ntohl(newBuffer.num_passwds); i++){
             //strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
             std::cout << newBuffer.passwds[i] << std::endl;
         }
+//send message
+        int sendsock = socket(AF_INET, SOCK_STREAM, 0);
+        if(sendsock < 0) exit(-1);
 
+        struct hostent *server = gethostbyname(buffer.hostname);
+        if(server == NULL) exit(-1);
+
+        struct sockaddr_in serv_addr;
+        bzero((char*) &serv_addr, sizeof(serv_addr));
+        serv_addr.sin_family = AF_INET;
+        bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
+        serv_addr.sin_port = buffer.port;
+
+        if(connect(sendsock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
+
+        int s = send(sendsock, (void*) &newBuffer, sizeof(newBuffer), 0);
+        if(s < 0) exit(-1);
+
+        close(sendsock);
     }
+// Nogbad, thor, olaf: clients
     else{
         unsigned int st;
         int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -256,25 +268,6 @@ int main() {
         close(sockfd);
     }
 
-
-    int sendsock = socket(AF_INET, SOCK_STREAM, 0);
-    if(sendsock < 0) exit(-1);
-
-    struct hostent *server = gethostbyname(buffer.hostname);
-    if(server == NULL) exit(-1);
-
-    struct sockaddr_in serv_addr;
-    bzero((char*) &serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
-    serv_addr.sin_port = buffer.port;
-
-    if(connect(sendsock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
-
-    int s = send(sendsock, (void*) &newBuffer, sizeof(newBuffer), 0);
-    if(s < 0) exit(-1);
-
-    close(sendsock);
 // Send new Message to the Server 
 
 }
