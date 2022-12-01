@@ -41,7 +41,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
         a[0] = alphabet[i];
         for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
             a[1] = alphabet[j];
-            if(j = ALPHABET_LEN - 1){
+            if(j == ALPHABET_LEN - 1){
                 end = clock();
                 std::cout << end - start << std::endl;
             }
