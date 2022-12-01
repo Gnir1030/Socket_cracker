@@ -68,6 +68,7 @@ typedef struct subcontainer {
 Sub;
 
 int main() {
+//Receive Message from Test/Grade Server
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0); //receiving UDP socket
     if(sockfd < 0 ) exit(-1);
 
@@ -91,8 +92,6 @@ int main() {
     if(n < 0) exit(-1);
 
     close(sockfd);
-//Receive Message from Test/Grade Server
-
 
     strcpy(newBuffer.alphabet,buffer.alphabet);
     strcpy(newBuffer.hostname,buffer.hostname);
@@ -108,11 +107,11 @@ int main() {
     char hostname[7];
     gethostname(hostname, 7);
     if(strcmp(hostname, "noggin") == 0){
-//crack passwords
+//Crack passwords
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            std::cout << buffer.passwds[k] <<std::endl;
+            //std::cout << buffer.passwds[k] <<std::endl;
             //
             strcpy(newBuffer.passwds[k], "!!!!"); 
             //
@@ -151,7 +150,7 @@ int main() {
             sockets.push_back(sockfd);
             port++;
         }
-//loop while 3 client send messages
+//loop until 3 clients send messages
         int counter = 0;
         while(counter < 3){
             int status = -1;
@@ -200,7 +199,7 @@ int main() {
             //strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
             std::cout << newBuffer.passwds[i] << std::endl;
         }
-//send message
+//send message to test server
         int sendsock = socket(AF_INET, SOCK_STREAM, 0);
         if(sendsock < 0) exit(-1);
 
@@ -220,7 +219,7 @@ int main() {
 
         close(sendsock);
     }
-// Nogbad, thor, olaf: clients
+//Nogbad, thor, olaf: clients
     else{
         unsigned int st;
         int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -237,6 +236,7 @@ int main() {
         else if(strcmp(hostname, "thor") == 0) {serv_addr.sin_port = htons(5002); st = 2;}
         else {serv_addr.sin_port = htons(5003); st = 3;}
 
+//Crack passwords
         Sub sBuffer;
         unsigned int ssize = 24;
         for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
@@ -255,7 +255,7 @@ int main() {
                 t.join(); // join threads vector
             }
         }
-
+//Send to master server
         strcpy(sBuffer.hostname, hostname);
         while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
         send(sockfd, (void*) &sBuffer, sizeof(sBuffer), 0);
