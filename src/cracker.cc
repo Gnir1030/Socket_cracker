@@ -41,10 +41,6 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
         a[0] = alphabet[i];
         for(unsigned int j = 0; j <  ALPHABET_LEN; j++){
             a[1] = alphabet[j];
-            if(j == ALPHABET_LEN - 1){
-                end = clock();
-                std::cout << end - start << std::endl;
-            }
             for(unsigned int k = 0; k <  ALPHABET_LEN; k++){
                 a[2] = alphabet[k];
                 for(unsigned int p = 0; p < ALPHABET_LEN; p++){
@@ -218,7 +214,8 @@ int main() {
 
         if(connect(sendsock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
-        int s = send(sendsock, (void*) &newBuffer, sizeof(newBuffer), 0);
+        //int s = send(sendsock, (void*) &newBuffer, sizeof(newBuffer), 0);
+        int s = write(sendsock, &newBuffer, sizeof(newBuffer));
         if(s < 0) exit(-1);
 
         close(sendsock);
