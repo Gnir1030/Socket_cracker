@@ -111,7 +111,7 @@ int main() {
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            //std::cout << buffer.passwds[k] <<std::endl;
+            std::cout << buffer.passwds[k] <<std::endl;
             //
             strcpy(newBuffer.passwds[k], "!!!!"); 
             //
@@ -210,7 +210,7 @@ int main() {
         bzero((char*) &serv_addr, sizeof(serv_addr));
         serv_addr.sin_family = AF_INET;
         bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
-        serv_addr.sin_port = get_unicast_port();
+        serv_addr.sin_port = buffer.port;
 
         if(connect(sendsock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
