@@ -27,10 +27,10 @@
  * @return int not checked by test harness
  */
 void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
+    struct timespec begin, end;
+    clock_gettime(CLOCK_MONOTONIC, &begin);
     char a[5]; //4 char password
     char salt[3];
-    clock_t start, end;
-    start = clock();
     memcpy( salt, &hash[0], 2); // first two character as salt
     struct crypt_data data;
     data.initialized = 0;
@@ -47,9 +47,10 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     a[3] = alphabet[p];
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         memcpy( passwd, &a[0], 5);
-                        end = clock();
+                        clock_gettime(CLOCK_MONOTONIC, &end);
                         std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\ncrypt(a,salt):" << crypt_r(a, salt, &data)
-                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " << (double)(end -start) <<std::endl;
+                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " <<
+                        (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) / 1000000000.0 <<std::endl;
                         return;
                     }
                     if(strcmp(passwd, "!!!!") != 0){
