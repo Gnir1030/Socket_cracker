@@ -111,7 +111,7 @@ int main() {
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            std::cout << buffer.passwds[k] <<std::endl;
+            std::cout << std::endl << buffer.passwds[k] <<std::endl;
             //
             strcpy(newBuffer.passwds[k], "!!!!"); 
             //
