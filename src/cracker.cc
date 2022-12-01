@@ -104,8 +104,9 @@ int main() {
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
     }
-    
 
+    std::cout << get_unicast_port() <<std::endl;
+    std::cout << buffer.port <<std::endl;
  
     char hostname[7];
     gethostname(hostname, 7);
