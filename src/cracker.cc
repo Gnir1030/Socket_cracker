@@ -29,8 +29,8 @@
 void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int split, unsigned int threads){
     char a[5]; //4 char password
     char salt[3];
-    //clock_t start, end;
-    //start = clock();
+    clock_t start, end;
+    start = clock();
     memcpy( salt, &hash[0], 2); // first two character as salt
     struct crypt_data data;
     data.initialized = 0;
@@ -47,9 +47,9 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     a[3] = alphabet[p];
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         memcpy( passwd, &a[0], 5);
-                        //end = clock();
-                        //std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\ncrypt(a,salt):" << crypt_r(a, salt, &data)
-                        //<< "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " << (double)(end -start) <<std::endl;
+                        end = clock();
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << "\ncrypt(a,salt):" << crypt_r(a, salt, &data)
+                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " << (double)(end -start) <<std::endl;
                         return;
                     }
                     if(strcmp(passwd, "!!!!") != 0){
@@ -114,7 +114,7 @@ int main() {
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            //std::cout << buffer.passwds[k] <<std::endl;
+            std::cout << buffer.passwds[k] <<std::endl;
             //
             strcpy(newBuffer.passwds[k], "!!!!"); 
             //
@@ -243,7 +243,7 @@ int main() {
         unsigned int ssize = 24;
         for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            //std::cout << buffer.passwds[k] <<std::endl;
+            std::cout << buffer.passwds[k] <<std::endl;
             //
             strcpy(sBuffer.passwds[k], "!!!!"); 
             //
