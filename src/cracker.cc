@@ -259,7 +259,8 @@ int main() {
 //Send to master server
         strcpy(sBuffer.hostname, hostname);
         while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
-        send(sockfd, (void*) &sBuffer, sizeof(sBuffer), 0);
+        int s = write(sockfd, &sBuffer, sizeof(sBuffer));
+        if(s < 0) exit(-1);
 
         close(sockfd);
     }
