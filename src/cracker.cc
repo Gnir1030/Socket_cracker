@@ -104,9 +104,6 @@ int main() {
     for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
         std::cout << buffer.passwds[i] <<std::endl;
     }
-
-    std::cout << get_unicast_port() <<std::endl;
-    std::cout << buffer.port <<std::endl;
  
     char hostname[7];
     gethostname(hostname, 7);
@@ -214,7 +211,7 @@ int main() {
         bzero((char*) &serv_addr, sizeof(serv_addr));
         serv_addr.sin_family = AF_INET;
         bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length);
-        serv_addr.sin_port = buffer.port;
+        serv_addr.sin_port = get_unicast_port();
 
         if(connect(sendsock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) exit(-1);
 
