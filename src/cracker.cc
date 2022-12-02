@@ -197,8 +197,9 @@ int main() {
             close(newsockfd);
 
         }
+        std::cout << "RESULT:" << std::endl;
         for(unsigned int i = 0; i < ntohl(newBuffer.num_passwds); i++){
-            std::cout << "RESULT: \n" << newBuffer.passwds[i] << std::endl;
+            std::cout << buffer.pawds[i] << "->" << newBuffer.passwds[i] << std::endl;
         }
 //send message to test server
         int sendsock = socket(AF_INET, SOCK_STREAM, 0);
