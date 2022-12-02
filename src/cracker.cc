@@ -48,9 +48,9 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         memcpy( passwd, &a[0], 5);
                         clock_gettime(CLOCK_MONOTONIC, &end);
-                        //std::cout << "\nthread: " << threads << "\ncharacter: " << a 
-                        //<< "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " <<
-                        //(end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) / 1000000000.0 <<std::endl;
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a 
+                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " <<
+                        (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) / 1000000000.0 <<std::endl << "CRACKED\n";
                         return;
                     }
                     if(strcmp(passwd, "!!!!") != 0){
@@ -100,10 +100,10 @@ int main() {
     newBuffer.num_passwds = buffer.num_passwds;
     newBuffer.port = buffer.port;
 
-    //std::cout << buffer.alphabet <<std::endl;
-    //for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-    //    std::cout << buffer.passwds[i] <<std::endl;
-    //}
+    std::cout << "RECEIVED: " <<std::endl;
+    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+        std::cout << buffer.passwds[i] <<std::endl;
+    }
  
     char hostname[7];
     gethostname(hostname, 7);
@@ -144,7 +144,7 @@ int main() {
             bind(sockfd, (struct sockaddr*) &master_addr, sizeof(master_addr));
 
             listen(sockfd, 5);
-            //printf("Listening on port: %d\n", port);
+            printf("Listening on port: %d\n", port);
 
             FD_SET(sockfd, &readfds);
             if(sockfd > maxfd) maxfd = sockfd;
@@ -195,10 +195,10 @@ int main() {
                 counter++;
             }
             close(newsockfd);
+
         }
         for(unsigned int i = 0; i < ntohl(newBuffer.num_passwds); i++){
-            //strcpy(newBuffer.passwds[i], Rbuffer.passwds[i]);
-            std::cout << newBuffer.passwds[i] << std::endl;
+            std::cout << "RESULT: \n" << newBuffer.passwds[i] << std::endl;
         }
 //send message to test server
         int sendsock = socket(AF_INET, SOCK_STREAM, 0);
@@ -218,7 +218,7 @@ int main() {
         //int s = send(sendsock, (void*) &newBuffer, sizeof(newBuffer), 0);
         int s = write(sendsock, &newBuffer, sizeof(newBuffer));
         if(s < 0) exit(-1);
-
+        std::cout << "MASTER COMPLETE" << std::endl;
         close(sendsock);
     }
 //Nogbad, thor, olaf: clients
@@ -262,7 +262,7 @@ int main() {
         while(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){} 
         int s = write(sockfd, &sBuffer, sizeof(sBuffer));
         if(s < 0) exit(-1);
-
+        std::cout << "CLIENT COMPLETE" << std::endl;
         close(sockfd);
     }
 
