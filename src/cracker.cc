@@ -48,7 +48,7 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         memcpy( passwd, &a[0], 5);
                         clock_gettime(CLOCK_MONOTONIC, &end);
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a << 
+                        std::cout << "\nthread: " << threads << "\ncharacter: " << a 
                         << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " <<
                         (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) / 1000000000.0 <<std::endl;
                         return;
