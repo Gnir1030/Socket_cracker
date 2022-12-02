@@ -48,9 +48,9 @@ void pcrack(const char *alphabet, const char *hash, char *passwd, unsigned int s
                     if(strcmp(crypt_r(a, salt, &data), hash) == 0){
                         memcpy( passwd, &a[0], 5);
                         clock_gettime(CLOCK_MONOTONIC, &end);
-                        std::cout << "\nthread: " << threads << "\ncharacter: " << a 
-                        << "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " <<
-                        (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) / 1000000000.0 <<std::endl;
+                        //std::cout << "\nthread: " << threads << "\ncharacter: " << a 
+                        //<< "\nsalt: " << salt << "\nhash: " << hash << "\npasswd:" << passwd << "\nTime: " <<
+                        //(end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec) / 1000000000.0 <<std::endl;
                         return;
                     }
                     if(strcmp(passwd, "!!!!") != 0){
@@ -100,10 +100,10 @@ int main() {
     newBuffer.num_passwds = buffer.num_passwds;
     newBuffer.port = buffer.port;
 
-    std::cout << buffer.alphabet <<std::endl;
-    for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
-        std::cout << buffer.passwds[i] <<std::endl;
-    }
+    //std::cout << buffer.alphabet <<std::endl;
+    //for(unsigned int i = 0; i < ntohl(buffer.num_passwds); i++){
+    //    std::cout << buffer.passwds[i] <<std::endl;
+    //}
  
     char hostname[7];
     gethostname(hostname, 7);
@@ -112,7 +112,7 @@ int main() {
         unsigned int ssize = 24;
         for(unsigned int k = 0; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            std::cout << std::endl << buffer.passwds[k] <<std::endl;
+            //std::cout << std::endl << buffer.passwds[k] <<std::endl;
             //
             strcpy(newBuffer.passwds[k], "!!!!"); 
             //
@@ -243,7 +243,7 @@ int main() {
         unsigned int ssize = 24;
         for(unsigned int k = st; k < ntohl(buffer.num_passwds); k = k + 4){
             std::vector<std::thread> thrs;
-            std::cout << std::endl << buffer.passwds[k] <<std::endl;
+            //std::cout << std::endl << buffer.passwds[k] <<std::endl;
             //
             strcpy(sBuffer.passwds[k], "!!!!"); 
             //
