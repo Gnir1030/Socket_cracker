@@ -144,7 +144,7 @@ int main() {
             bind(sockfd, (struct sockaddr*) &master_addr, sizeof(master_addr));
 
             listen(sockfd, 5);
-            printf("Listening on port: %d\n", port);
+            //printf("Listening on port: %d\n", port);
 
             FD_SET(sockfd, &readfds);
             if(sockfd > maxfd) maxfd = sockfd;
@@ -161,7 +161,7 @@ int main() {
             tv.tv_sec = 2;
             int rc = select(maxfd + 1, &readfds, 0,0, &tv);
             if(rc == 0){
-                printf("Timeout\n");
+                //printf("Timeout\n");
                 continue;
             }
             int sockfd = -1;
